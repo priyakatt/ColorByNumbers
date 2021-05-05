@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-
-=======
->>>>>>> 6983ab4ebfdf95c44cf9276d2ed5cacae544ddbc
 import pygame
 from pygame.locals import* #for event MOUSE variables
 import os
@@ -59,46 +55,47 @@ image = cv2.imread('njcutuP.png',1)     #load image
 canvas = cv2.imread('aXnc7xn.png',1) # load blank canvas
 resize = cv2.resize(image, (320,240))   #resize to PiTFT screen size
 hsv_img = cv2.cvtColor(resize, cv2.COLOR_BGR2HSV)   #Conveert from BGR to HSV
+oranges = cv2.imread('oranges.png',1)
 
 #Red
 light_red = np.array([0.0,102,153])
-dark_red = np.array([0.0,255,255])
+dark_red = np.array([9,255,255])
 #orange
-light_orange = np.array([14,102,153])
-dark_orange = np.array([15,255,255])
+light_orange = np.array([10,102,153])
+dark_orange = np.array([20,255,255])
 #Y
-light_Y=np.array([30.0, 102.0, 153.0])
+light_Y=np.array([21, 102.0, 153.0])
 dark_Y=np.array([30.0, 255.0, 255.0])
 #G1
-light_G1 = np.array([45,102,153])
-dark_G1 = np.array([46,255,255])
+light_G1 = np.array([31,102,153])
+dark_G1 = np.array([47,255,255])
 #G2
-light_G2 = np.array([60,102,153])
-dark_G2 = np.array([61,255,255])
+light_G2 = np.array([48,102,153])
+dark_G2 = np.array([64,255,255])
 #G3
-light_G3 = np.array([74,102,153])
-dark_G3 = np.array([75,255,255])
+light_G3 = np.array([65,102,153])
+dark_G3 = np.array([80,255,255])
 #B1
-light_B1 = np.array([90,102,153])
-dark_B1 = np.array([90,255,255])
+light_B1 = np.array([81,102,153])
+dark_B1 = np.array([94,255,255])
 #B2
-light_B2 =np.array([105,102,153])
-dark_B2 = np.array([106,255,255])
+light_B2 =np.array([95,102,153])
+dark_B2 = np.array([108,255,255])
 #B3
-light_B3 = np.array([120,102,153])
-dark_B3 =np.array([120,255,255])
+light_B3 = np.array([109,102,153])
+dark_B3 =np.array([122,255,255])
 #Purple
-light_Purple = np.array([134,102,153])
-dark_Purple = np.array([135,255,255])
+light_Purple = np.array([123,102,153])
+dark_Purple = np.array([140,255,255])
 #Purp/Pink
-light_PurpPink = np.array([150,102,153])
+light_PurpPink = np.array([141,102,153])
 dark_PurpPink = np.array([150,255,255])
 #Pink/Red
-light_PinkRed = np.array([165,102,153])
-dark_PinkRed = np.array([166,255,255])
+light_PinkRed = np.array([151,102,153])
+dark_PinkRed = np.array([179,255,255])
 #Grey
 light_Grey = np.array([0,0.0,64])
-dark_Grey = np.array([0,0.0,224])
+dark_Grey = np.array([0,0.0,255])
 
 #Color Masks
 mask_Red = cv2.inRange(hsv_img, light_red, dark_red)     #red mask
@@ -189,42 +186,55 @@ while code_run:
             if canvas_screen ==True:
                 #fillColor = (0,128,255)     #BGR
                 # iterate through the 13 color sets to find which the pixel belongs to and fill that mask with fillColor
-                j=0
+                color_range=0
                 print('x')
                 print(Xcoord)
                 print('y')
                 print(y)
-                while j <13:
-                    mask_check=mask_all[j]
-                    print(mask_check[Ycoord,Xcoord])
+                while color_range <13:
+                    mask_check=mask_all[color_range]
+                    #color_range=j
+                    #print(mask_check[Ycoord,Xcoord])
+
                     #print('x')
                     #print(Xcoord)
                     #print('y')
                     #print(y)
                 
                     if mask_check[Ycoord,Xcoord] ==255:
-                        result_check = result_all[j]
-                        fillColor = result_check[Ycoord,Xcoord]
-                        print(fillColor)
-                        fillB = int(fillColor[0])
-                        fillG = int(fillColor[1])
-                        fillR = int(fillColor[2])
-                        cv2.fillPoly(canvas, contours_all[j],(fillB,fillG,fillR))
+                        if color_range ==1:
+                            oranges_og = cv2.imread('oranges.png',1)
+                            oranges = cv2.resize(oranges_og, (320,240))
+                            orangesPygame = pygame.image.load("oranges.png")
+                            oranges_rect = orangesPygame.get_rect()
+                            screen.fill(BLACK)
+                            screen.blit(orangesPygame,oranges_rect)
+                            pygame.display.flip()
+
+                        #result_check = result_all[j]
+                        #fillColor = result_check[Ycoord,Xcoord]
+                        #print(fillColor)
+                        #fillB = int(fillColor[0])
+                        #fillG = int(fillColor[1])
+                        #fillR = int(fillColor[2])
+                        #cv2.fillPoly(canvas, contours_all[j],(fillB,fillG,fillR))
                         #print(x)
-                        color_range = j
+                        #color_range = j
                         # display color pick screen
-                        cv2.imwrite('canvas.png',canvas)
-                        canvasPygame = pygame.image.load("canvas.png")
-                        canvas_rect = canvasPygame.get_rect()
-                        screen.fill(BLACK)
-                        screen.blit(canvasPygame ,canvas_rect)
-                        pygame.display.flip()
+                        #cv2.imwrite('canvas.png',canvas)
+                        #canvasPygame = pygame.image.load("canvas.png")
+                        #canvas_rect = canvasPygame.get_rect()
+                        #screen.fill(BLACK)
+                        #screen.blit(canvasPygame ,canvas_rect)
+                        #pygame.display.flip()
                         break
                     else:
-                        j=j+1
+                        color_range=color_range+1
                 canvas_screen = not canvas_screen
             else:
                 #find color of pick (x,y)
+                if color_range ==1:
+                    fillColor = oranges[Ycoord,Xcoord]
                 # color_range corresponds to which color range the shape choice was from
                 #fillColor = 
                 fillB = int(fillColor[0])
@@ -237,7 +247,7 @@ while code_run:
                 screen.fill(BLACK)
                 screen.blit(canvasPygame ,canvas_rect)
                 pygame.display.flip()
-
+                canvas_screen = not canvas_screen
 
             #cv2.imshow('Fill',canvas)
             #cv2.waitKey(0)
@@ -258,7 +268,3 @@ while code_run:
 #dataFile.close()    #close text file
 #print(str(xydata))  #print data
 #GPIO.cleanup()  #cleanup
-<<<<<<< HEAD
-
-=======
->>>>>>> 6983ab4ebfdf95c44cf9276d2ed5cacae544ddbc
