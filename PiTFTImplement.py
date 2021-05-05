@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 
+=======
+>>>>>>> 6983ab4ebfdf95c44cf9276d2ed5cacae544ddbc
 import pygame
 from pygame.locals import* #for event MOUSE variables
 import os
@@ -255,4 +258,7 @@ while code_run:
 #dataFile.close()    #close text file
 #print(str(xydata))  #print data
 #GPIO.cleanup()  #cleanup
+<<<<<<< HEAD
 
+=======
+>>>>>>> 6983ab4ebfdf95c44cf9276d2ed5cacae544ddbc
