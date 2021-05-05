@@ -32,7 +32,7 @@ light_B1 = np.array([90,102,153])
 dark_B1 = np.array([90,255,255])
 #B2
 light_B2 =np.array([105,102,153])
-dark_B2 = np.array([151,255,255])
+dark_B2 = np.array([106,255,255])
 #B3
 light_B3 = np.array([120,102,153])
 dark_B3 =np.array([120,255,255])
@@ -89,6 +89,10 @@ result_Grey= cv2.bitwise_and(resize, resize, mask=mask_Grey)   #combined grey ma
 #cv2.imshow('res_pix',resize)
 
 #display images
+cv2.imshow('mask_G1',mask_G1)
+cv2.imshow('mask_G2',mask_G2)
+cv2.imshow('mask_G3',mask_G3)
+cv2.imshow('mask_Purple', mask_Purple)
 #cv2.imshow('maskGreen',maskGreen)
 #cv2.imshow('imGreen', resultGreen)
 #cv2.imshow('maskRed',maskRed)
