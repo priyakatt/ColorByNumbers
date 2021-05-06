@@ -6,59 +6,39 @@ import time
 import cv2
 import numpy as np
 
-GPIO.setmode(GPIO.BCM) # set mode for broadcom numbering
-#GPIO.setup(27, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-
-
 start_time = time.time()    #start time
-timeOut = 30    #timeout after 30 seconds
-
-#def GPIO27_callback(channel): #GPIO27 quit 
- #   print("Quit \n")
-  #  global code_run
-   # code_run=False  #set flag to 0 to tell main code to end
+timeOut = 120    #timeout after 120 seconds
 
 #PiTFT
-#os.putenv('SDL_VIDEODRIVER','fbcon') #Display on PiTFT
-#os.putenv('SDL_FBDEV','/dev/fb1')
-#os.putenv('SDL_MOUSEDRV','TSLIB') #Track mouse clicks on PiTFT
-#os.putenv('SDL_MOUSEDEV','/dev/input/touchscreen')
+os.putenv('SDL_VIDEODRIVER','fbcon') #Display on PiTFT
+os.putenv('SDL_FBDEV','/dev/fb1')
+os.putenv('SDL_MOUSEDRV','TSLIB') #Track mouse clicks on PiTFT
+os.putenv('SDL_MOUSEDEV','/dev/input/touchscreen')
 
 pygame.init()   #initialize pygame library
-pygame.mouse.set_visible(True) #turn cursor on (VNC)
-#pygame.mouse.set_visible(False) #turn cursor off (piTFT)
+#pygame.mouse.set_visible(True) #turn cursor on (VNC)
+pygame.mouse.set_visible(False) #turn cursor off (piTFT)
 WHITE = 255,255,255
 BLACK = 0,0,0
 screen = pygame.display.set_mode((320,240))
 
 Xcoord=0    #initialize x,y
 Ycoord=0    
-#my_font=pygame.font.Font(None,30)
-#my_buttons = {'quit':(160, 180), 'touch at '+str(Xcoord) +', '+str(Ycoord):(160,100)}   #display dictionary
 screen.fill(BLACK) #Erase workspace
-
-#display initial screen
-#for my_text, text_pos in my_buttons.items():    #cycle through dictionary to load text
-   # text_surface = my_font.render(my_text, True, WHITE) #set button surface
-   # rect = text_surface.get_rect(center=text_pos)
-   # screen.blit(text_surface, rect) #combine surfaces
-#pygame.display.flip()   #display working screen surface
-
-#GPIO.add_event_detect(27, GPIO.FALLING, callback=GPIO27_callback, bouncetime=300)   #GPIO27 quits script
-
-xydata=[]   #initialize list to store x,y coordinate data
-#dataFile=open("data_screen_coordinates.txt","w")    #open a txt file to write the data to
-
-
 #Image Processing
+canvas =cv2.imread('aXnc7xn.png',1)     #load blank canvas
+#resize = cv2.imread('xbruna-branco-7r1HxvVC7AY-unsplash.jpg.pagespeed.ic.0uw0h8xD-p.webp',1)
+#h,w,c = resize.shape
+#canvas = cv2.resize(canvas,(h,w))
+#screen = pygame.display.set_mode((h,w))
+
 image = cv2.imread('njcutuP.png',1)     #load image
-canvas = cv2.imread('aXnc7xn.png',1) # load blank canvas
-resize = cv2.resize(image, (320,240))   #resize to PiTFT screen size
+resize = cv2.resize(image, (320,240))
+canvas = cv2.resize(canvas, (320,240))
 hsv_img = cv2.cvtColor(resize, cv2.COLOR_BGR2HSV)   #Conveert from BGR to HSV
-oranges = cv2.imread('oranges.png',1)
 
 #Red
-light_red = np.array([0.0,102,153])
+light_red = np.array([0,102,153])
 dark_red = np.array([9,255,255])
 #orange
 light_orange = np.array([10,102,153])
@@ -112,9 +92,6 @@ mask_PurpPink = cv2.inRange(hsv_img, light_PurpPink, dark_PurpPink)  #orange mas
 mask_PinkRed = cv2.inRange(hsv_img, light_PinkRed, dark_PinkRed)   #Yellow mask
 mask_Grey = cv2.inRange(hsv_img, light_Grey, dark_Grey)     #red mask
 mask_all = [mask_Red, mask_Orange,mask_Yellow,mask_G1,mask_G2,mask_G3,mask_B1,mask_B2,mask_B3,mask_Purple,mask_PurpPink,mask_PinkRed, mask_Grey]
-mask_list =[]
-mask_list.append(mask_Red);
-#cv2.imshow('red_list',mask_list[0])
 #Apply Masks
 result_Red = cv2.bitwise_and(resize, resize, mask=mask_Red)   #combine red mask and image
 result_Orange = cv2.bitwise_and(resize, resize, mask=mask_Orange)     #combined Orange mask and image
@@ -182,61 +159,153 @@ while code_run:
             x,y=pos     #save x,y coordinates of touch
             Xcoord=x
             Ycoord=y
-            print(str(x)+","+str(y))
+            #print(str(x)+","+str(y))
             if canvas_screen ==True:
-                #fillColor = (0,128,255)     #BGR
-                # iterate through the 13 color sets to find which the pixel belongs to and fill that mask with fillColor
                 color_range=0
-                print('x')
-                print(Xcoord)
-                print('y')
-                print(y)
                 while color_range <13:
                     mask_check=mask_all[color_range]
-                    #color_range=j
-                    #print(mask_check[Ycoord,Xcoord])
-
-                    #print('x')
-                    #print(Xcoord)
-                    #print('y')
-                    #print(y)
-                
                     if mask_check[Ycoord,Xcoord] ==255:
-                        if color_range ==1:
-                            oranges_og = cv2.imread('oranges.png',1)
-                            oranges = cv2.resize(oranges_og, (320,240))
-                            orangesPygame = pygame.image.load("oranges.png")
-                            oranges_rect = orangesPygame.get_rect()
+                        if color_range ==0:
+                            #orange_og = cv2.imread('oranges.png',1)
+                            reds = cv2.imread('red_range.png',1)
+                            reds_pygame = pygame.image.load("red_range.png")
+                            reds_rect = reds_pygame.get_rect()
                             screen.fill(BLACK)
-                            screen.blit(orangesPygame,oranges_rect)
+                            screen.blit(reds_pygame,reds_rect)
                             pygame.display.flip()
 
-                        #result_check = result_all[j]
-                        #fillColor = result_check[Ycoord,Xcoord]
-                        #print(fillColor)
-                        #fillB = int(fillColor[0])
-                        #fillG = int(fillColor[1])
-                        #fillR = int(fillColor[2])
-                        #cv2.fillPoly(canvas, contours_all[j],(fillB,fillG,fillR))
-                        #print(x)
-                        #color_range = j
-                        # display color pick screen
-                        #cv2.imwrite('canvas.png',canvas)
-                        #canvasPygame = pygame.image.load("canvas.png")
-                        #canvas_rect = canvasPygame.get_rect()
-                        #screen.fill(BLACK)
-                        #screen.blit(canvasPygame ,canvas_rect)
-                        #pygame.display.flip()
+                        elif color_range ==1:
+                            oranges_og = cv2.imread('orange_range.png',1)
+                            oranges = cv2.resize(oranges_og, (320,240))
+                            oranges_pygame = pygame.image.load("orange_range.png")
+                            oranges_rect = oranges_pygame.get_rect()
+                            screen.fill(BLACK)
+                            screen.blit(oranges_pygame,oranges_rect)
+                            pygame.display.flip()
+                        elif color_range ==2:
+                            yellows= cv2.imread('yellow_range.png',1)
+                            #oranges = cv2.resize(oranges_og, (320,240))
+                            yellows_pygame = pygame.image.load("yellow_range.png")
+                            yellows_rect = yellows_pygame.get_rect()
+                            screen.fill(BLACK)
+                            screen.blit(yellows_pygame,yellows_rect)
+                            pygame.display.flip()
+                        elif color_range ==3:
+                            g1= cv2.imread('g1_range.png',1)
+                            #oranges = cv2.resize(oranges_og, (320,240))
+                            g1_pygame = pygame.image.load("g1_range.png")
+                            g1_rect = g1_pygame.get_rect()
+                            screen.fill(BLACK)
+                            screen.blit(g1_pygame,g1_rect)
+                            pygame.display.flip()
+                        elif color_range ==4:
+                            g2= cv2.imread('g2_range.png',1)
+                            #oranges = cv2.resize(oranges_og, (320,240))
+                            g2_pygame = pygame.image.load("g2_range.png")
+                            g2_rect = g2_pygame.get_rect()
+                            screen.fill(BLACK)
+                            screen.blit(g2_pygame,g2_rect)
+                            pygame.display.flip()
+
+                        elif color_range ==5:
+                            g3 = cv2.imread('g3_range.png',1)
+                            #oranges = cv2.resize(oranges_og, (320,240))
+                            g3_pygame = pygame.image.load("g3_range.png")
+                            g3_rect = g3_pygame.get_rect()
+                            screen.fill(BLACK)
+                            screen.blit(g3_pygame,g3_rect)
+                            pygame.display.flip()
+                        elif color_range ==6:
+                            b1 = cv2.imread('b1_range.png',1)
+                            #oranges = cv2.resize(oranges_og, (320,240))
+                            b1_pygame = pygame.image.load("b1_range.png")
+                            b1_rect = b1_pygame.get_rect()
+                            screen.fill(BLACK)
+                            screen.blit(b1_pygame,b1_rect)
+                            pygame.display.flip()
+                        elif color_range ==7:
+                            b2= cv2.imread('b2_range.png',1)
+                            #oranges = cv2.resize(oranges_og, (320,240))
+                            b2_pygame = pygame.image.load("b2_range.png")
+                            b2_rect = b2_pygame.get_rect()
+                            screen.fill(BLACK)
+                            screen.blit(b2_pygame,b2_rect)
+                            pygame.display.flip()
+                        elif color_range ==8:
+                            b3 = cv2.imread('b3_range.png',1)
+                            #oranges = cv2.resize(oranges_og, (320,240))
+                            b3_pygame = pygame.image.load("b3_range.png")
+                            b3_rect = b3_pygame.get_rect()
+                            screen.fill(BLACK)
+                            screen.blit(b3_pygame,b3_rect)
+                            pygame.display.flip()
+                        elif color_range ==9:
+                            purple= cv2.imread('purple_range.png',1)
+                            #oranges = cv2.resize(oranges_og, (320,240))
+                            purple_pygame = pygame.image.load("purple_range.png")
+                            purple_rect = purple_pygame.get_rect()
+                            screen.fill(BLACK)
+                            screen.blit(purple_pygame,purple_rect)
+                            pygame.display.flip()
+                        elif color_range ==10:
+                            purplepink = cv2.imread('purplepink_range.png',1)
+                            #oranges = cv2.resize(oranges_og, (320,240))
+                            purplepink_pygame = pygame.image.load("purplepink_range.png")
+                            purplepink_rect = purplepink_pygame.get_rect()
+                            screen.fill(BLACK)
+                            screen.blit(purplepink_pygame,purplepink_rect)
+                            pygame.display.flip()
+                        elif color_range ==11:
+                            pinkred = cv2.imread('pinkred_range.png',1)
+                            #oranges = cv2.resize(oranges_og, (320,240))
+                            pinkred_pygame = pygame.image.load("pinkred_range.png")
+                            pinkred_rect = pinkred_pygame.get_rect()
+                            screen.fill(BLACK)
+                            screen.blit(pinkred_pygame,pinkred_rect)
+                            pygame.display.flip()
+                        else:
+                            grey= cv2.imread('grey_range.png',1)
+                            #oranges = cv2.resize(oranges_og, (320,240))
+                            grey_pygame = pygame.image.load("grey_range.png")
+                            grey_rect = grey_pygame.get_rect()
+                            screen.fill(BLACK)
+                            screen.blit(grey_pygame,grey_rect)
+                            pygame.display.flip()
                         break
                     else:
                         color_range=color_range+1
                 canvas_screen = not canvas_screen
             else:
                 #find color of pick (x,y)
-                if color_range ==1:
+                if color_range ==0:
+                    fillColor = reds[Ycoord,Xcoord]
+                elif color_range ==1:
                     fillColor = oranges[Ycoord,Xcoord]
+                elif color_range ==2:
+                    fillColor = yellows[Ycoord,Xcoord]
+                elif color_range ==3:
+                    fillColor = g1[Ycoord,Xcoord]
+                elif color_range ==4:
+                    fillColor = g2[Ycoord,Xcoord]
+                elif color_range ==5:
+                    fillColor = g3[Ycoord,Xcoord]
+                elif color_range ==6:
+                    fillColor = b1[Ycoord,Xcoord]
+                elif color_range ==7:
+                    fillColor = b2[Ycoord,Xcoord]
+                elif color_range ==8:
+                    fillColor = b3[Ycoord,Xcoord]
+                elif color_range ==9:
+                    fillColor = purple[Ycoord,Xcoord]
+                elif color_range ==10:
+                    fillColor = purplepink[Ycoord,Xcoord]
+                elif color_range ==11:
+                    fillColor = pinkred[Ycoord,Xcoord]
+                elif color_range ==12:
+                    fillColor = grey[Ycoord,Xcoord]
+                else:
+                    fillColor = [255,255,255]
                 # color_range corresponds to which color range the shape choice was from
-                #fillColor = 
                 fillB = int(fillColor[0])
                 fillG = int(fillColor[1])
                 fillR = int(fillColor[2])
@@ -251,20 +320,3 @@ while code_run:
 
             #cv2.imshow('Fill',canvas)
             #cv2.waitKey(0)
-
-            #if y>160:   #quit button in range y>160 and 106<x<212
-             #   if  x>106 and x<212:
-              #      print("Screen Pressed")
-               #     code_run=False
-            #screen.fill(BLACK)  #erase workspace
-           # my_buttons = {'quit':(160, 180), 'touch at '+str(Xcoord) +', '+str(Ycoord):(160,100)}
-           # for my_text, text_pos in my_buttons.items():    #display buttons with new touch coordinates
-            #    text_surface = my_font.render(my_text, True, WHITE)
-             #   rect = text_surface.get_rect(center=text_pos)
-              #  screen.blit(text_surface, rect)
-               # pygame.display.flip()
-
-#dataFile.write(str(xydata)+"\n")    #write saved data to text file
-#dataFile.close()    #close text file
-#print(str(xydata))  #print data
-#GPIO.cleanup()  #cleanup
