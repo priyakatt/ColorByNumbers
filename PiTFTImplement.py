@@ -7,17 +7,17 @@ import cv2
 import numpy as np
 
 start_time = time.time()    #start time
-timeOut = 120    #timeout after 120 seconds
+timeOut = 1200    #timeout after 120 seconds
 
 #PiTFT
-os.putenv('SDL_VIDEODRIVER','fbcon') #Display on PiTFT
-os.putenv('SDL_FBDEV','/dev/fb1')
-os.putenv('SDL_MOUSEDRV','TSLIB') #Track mouse clicks on PiTFT
-os.putenv('SDL_MOUSEDEV','/dev/input/touchscreen')
+#os.putenv('SDL_VIDEODRIVER','fbcon') #Display on PiTFT
+#os.putenv('SDL_FBDEV','/dev/fb1')
+#os.putenv('SDL_MOUSEDRV','TSLIB') #Track mouse clicks on PiTFT
+#os.putenv('SDL_MOUSEDEV','/dev/input/touchscreen')
 
 pygame.init()   #initialize pygame library
-#pygame.mouse.set_visible(True) #turn cursor on (VNC)
-pygame.mouse.set_visible(False) #turn cursor off (piTFT)
+pygame.mouse.set_visible(True) #turn cursor on (VNC)
+#pygame.mouse.set_visible(False) #turn cursor off (piTFT)
 WHITE = 255,255,255
 BLACK = 0,0,0
 screen = pygame.display.set_mode((320,240))
@@ -26,15 +26,19 @@ Xcoord=0    #initialize x,y
 Ycoord=0    
 screen.fill(BLACK) #Erase workspace
 #Image Processing
+#monitor
 canvas =cv2.imread('aXnc7xn.png',1)     #load blank canvas
-#resize = cv2.imread('xbruna-branco-7r1HxvVC7AY-unsplash.jpg.pagespeed.ic.0uw0h8xD-p.webp',1)
-#h,w,c = resize.shape
-#canvas = cv2.resize(canvas,(h,w))
-#screen = pygame.display.set_mode((h,w))
+resize = cv2.imread('fruits.jpg',1)
+h,w,c = resize.shape
+canvas = cv2.resize(canvas,(w/3,h/3))
+screen = pygame.display.set_mode((w/3,h/3))
+resize = cv2.resize(resize,(w/3,h/3))
 
-image = cv2.imread('njcutuP.png',1)     #load image
-resize = cv2.resize(image, (320,240))
-canvas = cv2.resize(canvas, (320,240))
+#piTFT
+#image = cv2.imread('fruits.jpg',1)
+#image = cv2.imread('njcutuP.png',1)     #load image
+#resize = cv2.resize(image, (320,240))
+#anvas = cv2.resize(canvas, (320,240))
 hsv_img = cv2.cvtColor(resize, cv2.COLOR_BGR2HSV)   #Conveert from BGR to HSV
 
 #Red
@@ -76,7 +80,9 @@ dark_PinkRed = np.array([179,255,255])
 #Grey
 light_Grey = np.array([0,0.0,64])
 dark_Grey = np.array([0,0.0,255])
-
+#Dark
+light_dark = np.array([0,45,20])
+dark_dark = np.array([179,101,153])
 #Color Masks
 mask_Red = cv2.inRange(hsv_img, light_red, dark_red)     #red mask
 mask_Orange = cv2.inRange(hsv_img, light_orange, dark_orange)  #orange mask
@@ -91,7 +97,8 @@ mask_Purple = cv2.inRange(hsv_img, light_Purple, dark_Purple)     #red mask
 mask_PurpPink = cv2.inRange(hsv_img, light_PurpPink, dark_PurpPink)  #orange mask
 mask_PinkRed = cv2.inRange(hsv_img, light_PinkRed, dark_PinkRed)   #Yellow mask
 mask_Grey = cv2.inRange(hsv_img, light_Grey, dark_Grey)     #red mask
-mask_all = [mask_Red, mask_Orange,mask_Yellow,mask_G1,mask_G2,mask_G3,mask_B1,mask_B2,mask_B3,mask_Purple,mask_PurpPink,mask_PinkRed, mask_Grey]
+mask_dark = cv2.inRange(hsv_img,light_dark,dark_dark) #dark mask
+mask_all = [mask_Red, mask_Orange,mask_Yellow,mask_G1,mask_G2,mask_G3,mask_B1,mask_B2,mask_B3,mask_Purple,mask_PurpPink,mask_PinkRed, mask_Grey,mask_dark]
 #Apply Masks
 result_Red = cv2.bitwise_and(resize, resize, mask=mask_Red)   #combine red mask and image
 result_Orange = cv2.bitwise_and(resize, resize, mask=mask_Orange)     #combined Orange mask and image
@@ -106,7 +113,8 @@ result_Purple = cv2.bitwise_and(resize, resize, mask=mask_Purple)   #combine Pur
 result_PurpPink = cv2.bitwise_and(resize, resize, mask=mask_PurpPink)     #combined purple/pink mask and image
 result_PinkRed= cv2.bitwise_and(resize, resize, mask=mask_PinkRed)   #combined pink/red  mask and image
 result_Grey= cv2.bitwise_and(resize, resize, mask=mask_Grey)   #combined grey mask and image
-result_all = [result_Red,result_Orange,result_Yellow,result_G1,result_G2,result_G3,result_B1,result_B2,result_B3,result_Purple,result_PurpPink,result_PinkRed,result_Grey];
+result_dark = cv2.bitwise_and(resize,resize,mask=mask_dark)
+result_all = [result_Red,result_Orange,result_Yellow,result_G1,result_G2,result_G3,result_B1,result_B2,result_B3,result_Purple,result_PurpPink,result_PinkRed,result_Grey,result_dark];
 #Grey Scale
 mask_Red_GS = cv2.cvtColor(result_Red, cv2.COLOR_BGR2GRAY)
 ret,thresh = cv2.threshold(mask_Red_GS, 27,55 ,0)
@@ -124,11 +132,12 @@ _,contours_Purple,hier = cv2.findContours(mask_Purple, cv2.RETR_TREE, cv2.CHAIN_
 _,contours_PurpPink,hier = cv2.findContours(mask_PurpPink, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
 _,contours_PinkRed,hier = cv2.findContours(mask_PinkRed, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
 _,contours_Grey,hier = cv2.findContours(mask_Grey, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
+_,contours_dark,hier = cv2.findContours(mask_dark, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
 
-contours_all = [contours_Red, contours_Orange, contours_Yellow, contours_G1, contours_G2, contours_G3, contours_B1, contours_B2, contours_B3, contours_Purple, contours_PurpPink, contours_PinkRed, contours_Grey]
+contours_all = [contours_Red, contours_Orange, contours_Yellow, contours_G1, contours_G2, contours_G3, contours_B1, contours_B2, contours_B3, contours_Purple, contours_PurpPink, contours_PinkRed, contours_Grey,contours_dark]
 c=0
 while c <13:
-    cv2.drawContours(canvas, contours_all[c], -1, (0,0,0),3)
+    cv2.drawContours(canvas, contours_all[c], -1, (0,0,0),1)
     c = c+1
 
 cv2.imwrite('canvas.png',canvas)
@@ -137,7 +146,15 @@ canvas_rect = canvasPygame.get_rect()
 screen.blit(canvasPygame, canvas_rect)
 pygame.display.flip()
 #cv2.imshow('FINAL',canvas)
-
+cv2.imshow('b1',mask_B1)
+cv2.imshow('b2',mask_B2)
+cv2.imshow('b3',mask_B3)
+cv2.imshow('purple',mask_Purple)
+cv2.imshow('PurpPink',mask_PurpPink)
+cv2.imshow('pinkred',mask_PinkRed)
+cv2.imshow('dark',mask_dark)
+cv2.waitKey(0)
+#pause(20)
 #END IMAGE PROCESSING
 
 
@@ -304,18 +321,19 @@ while code_run:
                 elif color_range ==12:
                     fillColor = grey[Ycoord,Xcoord]
                 else:
-                    fillColor = [255,255,255]
+                    fillColor = resize[Ycoord,Xcoord]
                 # color_range corresponds to which color range the shape choice was from
                 fillB = int(fillColor[0])
                 fillG = int(fillColor[1])
                 fillR = int(fillColor[2])
-                cv2.fillPoly(canvas,contours_all[color_range], (fillB,fillG,fillR))
-                cv2.imwrite('canvas.png',canvas)
-                canvasPygame = pygame.image.load("canvas.png")
-                canvas_rect = canvasPygame.get_rect()
-                screen.fill(BLACK)
-                screen.blit(canvasPygame ,canvas_rect)
-                pygame.display.flip()
+                if color_range <13:
+                    cv2.fillPoly(canvas,contours_all[color_range], (fillB,fillG,fillR))
+                    cv2.imwrite('canvas.png',canvas)
+                    canvasPygame = pygame.image.load("canvas.png")
+                    canvas_rect = canvasPygame.get_rect()
+                    screen.fill(BLACK)
+                    screen.blit(canvasPygame ,canvas_rect)
+                    pygame.display.flip()
                 canvas_screen = not canvas_screen
 
             #cv2.imshow('Fill',canvas)
