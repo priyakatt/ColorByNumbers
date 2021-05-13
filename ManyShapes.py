@@ -456,7 +456,7 @@ while code_run:
                     fillColor = g3[Ycoord,Xcoord]
                 elif color_range ==6:           #B1
                     fillColor = b1[Ycoord,Xcoord]
-                elif color_range ==7:           B2
+                elif color_range ==7:          # B2
                     fillColor = b2[Ycoord,Xcoord]
                 elif color_range ==8:           #B3
                     fillColor = b3[Ycoord,Xcoord]
