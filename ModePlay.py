@@ -76,6 +76,9 @@ shape_canvas = cv2.imread('aXnc7xn.png',1)
 resize = cv2.imread('6ukjvZN.png',1)
 resize_pygame = pygame.image.load("6ukjvZN.png")
 resize_rect = resize_pygame.get_rect()
+all_colors = cv2.imread('allcolors.png',1)
+all_colors_pygame = pygame.image.load('allcolors.png')
+all_colors_rect = all_colors_pygame.get_rect()
 #h,w,c = resize.shape
 #canvas = cv2.resize(canvas,(w/3,h/3))
 #screen = pygame.display.set_mode((w/3,h/3))
@@ -87,6 +90,46 @@ resize_rect = resize_pygame.get_rect()
 #resize = cv2.resize(image, (320,240))
 #anvas = cv2.resize(canvas, (320,240))
 hsv_img = cv2.cvtColor(resize, cv2.COLOR_BGR2HSV)   #Conveert from BGR to HSV
+#----Load Color Range Images-------
+reds = cv2.imread('red_range.png',1)
+reds_pygame = pygame.image.load("red_range.png")
+reds_rect = reds_pygame.get_rect()
+oranges = cv2.imread('orange_range.png',1)
+oranges_pygame = pygame.image.load("orange_range.png")
+oranges_rect = oranges_pygame.get_rect()
+yellows= cv2.imread('yellow_range.png',1)
+yellows_pygame = pygame.image.load("yellow_range.png")
+yellows_rect = yellows_pygame.get_rect()
+g1= cv2.imread('g1_range.png',1)
+g1_pygame = pygame.image.load("g1_range.png")
+g1_rect = g1_pygame.get_rect()
+g2= cv2.imread('g2_range.png',1)
+g2_pygame = pygame.image.load("g2_range.png")
+g2_rect = g2_pygame.get_rect()
+g3 = cv2.imread('g3_range.png',1)
+g3_pygame = pygame.image.load("g3_range.png")
+g3_rect = g3_pygame.get_rect()
+b1 = cv2.imread('b1_range.png',1)
+b1_pygame = pygame.image.load("b1_range.png")
+b1_rect = b1_pygame.get_rect()
+b2= cv2.imread('b2_range.png',1)
+b2_pygame = pygame.image.load("b2_range.png")
+b2_rect = b2_pygame.get_rect()
+b3 = cv2.imread('b3_range.png',1)
+b3_pygame = pygame.image.load("b3_range.png")
+b3_rect = b3_pygame.get_rect()
+purple= cv2.imread('purple_range.png',1)
+purple_pygame = pygame.image.load("purple_range.png")
+purple_rect = purple_pygame.get_rect()
+purplepink = cv2.imread('purplepink_range.png',1)
+purplepink_pygame = pygame.image.load("purplepink_range.png")
+purplepink_rect = purplepink_pygame.get_rect()
+pinkred = cv2.imread('pinkred_range.png',1)
+pinkred_pygame = pygame.image.load("pinkred_range.png")
+pinkred_rect = pinkred_pygame.get_rect()
+grey= cv2.imread('grey_range.png',1)
+grey_pygame = pygame.image.load("grey_range.png")
+grey_rect = grey_pygame.get_rect()
 #--------Set Color Ranges-------
 #Red
 light_red = np.array([0,102,153])
@@ -346,7 +389,12 @@ print(Grey_shapes_tot)
 #-------MAIN-----------
 draw_screen=True
 canvas_screen = True
-code_run=True  
+code_run=True 
+free_play = True
+normal_play=False
+hue_screen=False
+free_color_range=13
+start_screen=True
 while code_run:
     current_time = time.time()
     elapsed_time = current_time - start_time     #calculate time elapsed
@@ -359,8 +407,18 @@ while code_run:
             x,y=pos     #save x,y coordinates of touch
             Xcoord=x
             Ycoord=y
-            #print(str(x)+","+str(y))
-            if canvas_screen ==True:
+            if start_screen==True:
+                if Ycoord<120:
+                    normal_play=True
+                    free_play=False
+                else:
+                    normal_play=False
+                    free_play=True
+                start_screen= not start_screen
+                screen.blit(canvasPygame, canvas_rect)
+                pygame.display.flip()
+            elif canvas_screen ==True:
+                found_shape=False
                 color_range=0
                 while color_range <13:
                     mask_check=mask_all[color_range]
@@ -370,15 +428,15 @@ while code_run:
                             shape_num =0
                             while shape_num<red_shapes_tot:
                                 red_check = red_shapes_list[shape_num]
-                                if red_check[Ycoord,Xcoord]==255:
-                                    reds = cv2.imread('red_range.png',1)
-                                    reds_pygame = pygame.image.load("red_range.png")
-                                    reds_rect = reds_pygame.get_rect()
-                                    screen.fill(BLACK)
-                                    screen.blit(reds_pygame,reds_rect)
-                                    pygame.display.flip()
-                                    break
-
+                                if red_check[Ycoord,Xcoord]==255: 
+                                    if normal_play==True:     #Display red color gradient
+                                        screen.fill(BLACK)
+                                        screen.blit(reds_pygame,reds_rect)
+                                        break
+                                    else:
+                                        #display hue selection image
+                                        found_shape=True
+                                        break
                                 else:
                                     shape_num = shape_num+1
                         elif color_range ==1:           #ORANGE
@@ -387,14 +445,13 @@ while code_run:
                             while shape_num<orange_shapes_tot:
                                 orange_check = orange_shapes_list[shape_num]
                                 if orange_check[Ycoord,Xcoord]==255:
-                                    oranges_og = cv2.imread('orange_range.png',1)
-                                    oranges = cv2.resize(oranges_og, (320,240))
-                                    oranges_pygame = pygame.image.load("orange_range.png")
-                                    oranges_rect = oranges_pygame.get_rect()
-                                    screen.fill(BLACK)
-                                    screen.blit(oranges_pygame,oranges_rect)
-                                    pygame.display.flip()
-                                    break
+                                    if normal_play ==True:
+                                        screen.fill(BLACK)
+                                        screen.blit(oranges_pygame,oranges_rect)
+                                        break
+                                    else:
+                                        found_shape=True
+                                        break
                                 else:
                                      shape_num = shape_num+1
                         elif color_range ==2:           #YELLOW
@@ -403,14 +460,13 @@ while code_run:
                             while shape_num<yellow_shapes_tot:
                                 yellow_check = yellow_shapes_list[shape_num]
                                 if yellow_check[Ycoord,Xcoord]==255:
-                                    yellows= cv2.imread('yellow_range.png',1)
-                                    #oranges = cv2.resize(oranges_og, (320,240))
-                                    yellows_pygame = pygame.image.load("yellow_range.png")
-                                    yellows_rect = yellows_pygame.get_rect()
-                                    screen.fill(BLACK)
-                                    screen.blit(yellows_pygame,yellows_rect)
-                                    pygame.display.flip()
-                                    break
+                                    if normal_play==True:
+                                        screen.fill(BLACK)
+                                        screen.blit(yellows_pygame,yellows_rect)
+                                        break
+                                    else:
+                                        found_shape=True
+                                        break
                                 else:
                                     shape_num = shape_num+1
                         elif color_range ==3:           #G1
@@ -419,14 +475,13 @@ while code_run:
                             while shape_num<G1_shapes_tot:
                                 G1_check = G1_shapes_list[shape_num]
                                 if G1_check[Ycoord,Xcoord]==255:
-                                    g1= cv2.imread('g1_range.png',1)
-                                    #oranges = cv2.resize(oranges_og, (320,240))
-                                    g1_pygame = pygame.image.load("g1_range.png")
-                                    g1_rect = g1_pygame.get_rect()
-                                    screen.fill(BLACK)
-                                    screen.blit(g1_pygame,g1_rect)
-                                    pygame.display.flip()
-                                    break
+                                    if normal_play==True:
+                                        screen.fill(BLACK)
+                                        screen.blit(g1_pygame,g1_rect)
+                                        break
+                                    else:
+                                        found_shape=True
+                                        break
                                 else:
                                     shape_num = shape_num+1
                         elif color_range ==4:           #G2
@@ -435,14 +490,13 @@ while code_run:
                             while shape_num<G2_shapes_tot:
                                 G2_check = G2_shapes_list[shape_num]
                                 if G2_check[Ycoord,Xcoord]==255:
-                                    g2= cv2.imread('g2_range.png',1)
-                                    #oranges = cv2.resize(oranges_og, (320,240))
-                                    g2_pygame = pygame.image.load("g2_range.png")
-                                    g2_rect = g2_pygame.get_rect()
-                                    screen.fill(BLACK)
-                                    screen.blit(g2_pygame,g2_rect)
-                                    pygame.display.flip()
-                                    break
+                                    if normal_play ==True:
+                                        screen.fill(BLACK)
+                                        screen.blit(g2_pygame,g2_rect)
+                                        break
+                                    else:
+                                        found_shape=True
+                                        break
                                 else:
                                     shape_num = shape_num+1
 
@@ -452,14 +506,13 @@ while code_run:
                             while shape_num<red_shapes_tot:
                                 G3_check = G3_shapes_list[shape_num]
                                 if G3_check[Ycoord,Xcoord]==255:
-                                    g3 = cv2.imread('g3_range.png',1)
-                                    #oranges = cv2.resize(oranges_og, (320,240))
-                                    g3_pygame = pygame.image.load("g3_range.png")
-                                    g3_rect = g3_pygame.get_rect()
-                                    screen.fill(BLACK)
-                                    screen.blit(g3_pygame,g3_rect)
-                                    pygame.display.flip()
-                                    break
+                                    if normal_play==True:
+                                        screen.fill(BLACK)
+                                        screen.blit(g3_pygame,g3_rect)
+                                        break
+                                    else:
+                                        found_shape=True
+                                        break
                             else:
                                     shape_num = shape_num+1
                         elif color_range ==6:           #B1
@@ -468,14 +521,13 @@ while code_run:
                             while shape_num<B1_shapes_tot:
                                 B1_check = B1_shapes_list[shape_num]
                                 if B1_check[Ycoord,Xcoord]==255:
-                                    b1 = cv2.imread('b1_range.png',1)
-                                    #oranges = cv2.resize(oranges_og, (320,240))
-                                    b1_pygame = pygame.image.load("b1_range.png")
-                                    b1_rect = b1_pygame.get_rect()
-                                    screen.fill(BLACK)
-                                    screen.blit(b1_pygame,b1_rect)
-                                    pygame.display.flip()
-                                    break
+                                    if normal_play==True:
+                                        screen.fill(BLACK)
+                                        screen.blit(b1_pygame,b1_rect)
+                                        break
+                                    else:
+                                        found_shape=True
+                                        break
                             else:
                                     shape_num = shape_num+1
                         elif color_range ==7:           #B2
@@ -484,14 +536,13 @@ while code_run:
                             while shape_num<B2_shapes_tot:
                                 B2_check = B2_shapes_list[shape_num]
                                 if B2_check[Ycoord,Xcoord]==255:
-                                    b2= cv2.imread('b2_range.png',1)
-                                    #oranges = cv2.resize(oranges_og, (320,240))
-                                    b2_pygame = pygame.image.load("b2_range.png")
-                                    b2_rect = b2_pygame.get_rect()
-                                    screen.fill(BLACK)
-                                    screen.blit(b2_pygame,b2_rect)
-                                    pygame.display.flip()
-                                    break
+                                    if normal_play==True:
+                                        screen.fill(BLACK)
+                                        screen.blit(b2_pygame,b2_rect)
+                                        break
+                                    else:
+                                        found_shape=True
+                                        break
                                 else:
                                     shape_num = shape_num+1
                         elif color_range ==8:           #B3
@@ -500,14 +551,13 @@ while code_run:
                             while shape_num<B3_shapes_tot:
                                 B3_check = B3_shapes_list[shape_num]
                                 if B3_check[Ycoord,Xcoord]==255:
-                                    b3 = cv2.imread('b3_range.png',1)
-                                    #oranges = cv2.resize(oranges_og, (320,240))
-                                    b3_pygame = pygame.image.load("b3_range.png")
-                                    b3_rect = b3_pygame.get_rect()
-                                    screen.fill(BLACK)
-                                    screen.blit(b3_pygame,b3_rect)
-                                    pygame.display.flip()
-                                    break
+                                    if normal_play==True:
+                                        screen.fill(BLACK)
+                                        screen.blit(b3_pygame,b3_rect)
+                                        break
+                                    else:
+                                        found_shape=True
+                                        break
                                 else:
                                     shape_num = shape_num+1
                         elif color_range ==9:           #PURPLE
@@ -516,14 +566,13 @@ while code_run:
                             while shape_num<Purple_shapes_tot:
                                 Purple_check = Purple_shapes_list[shape_num]
                                 if Purple_check[Ycoord,Xcoord]==255:
-                                    purple= cv2.imread('purple_range.png',1)
-                                    #oranges = cv2.resize(oranges_og, (320,240))
-                                    purple_pygame = pygame.image.load("purple_range.png")
-                                    purple_rect = purple_pygame.get_rect()
-                                    screen.fill(BLACK)
-                                    screen.blit(purple_pygame,purple_rect)
-                                    pygame.display.flip()
-                                    break
+                                    if normal_play==True:
+                                        screen.fill(BLACK)
+                                        screen.blit(purple_pygame,purple_rect)
+                                        break
+                                    else:
+                                        found_shape=True
+                                        break
                                 else:
                                     shape_num = shape_num+1
                         elif color_range ==10:          #PURPLE/PINK
@@ -532,14 +581,13 @@ while code_run:
                             while shape_num<PurpPink_shapes_tot:
                                 PurpPink_check = PurpPink_shapes_list[shape_num]
                                 if PurpPink_check[Ycoord,Xcoord]==255:
-                                    purplepink = cv2.imread('purplepink_range.png',1)
-                                    #oranges = cv2.resize(oranges_og, (320,240))
-                                    purplepink_pygame = pygame.image.load("purplepink_range.png")
-                                    purplepink_rect = purplepink_pygame.get_rect()
-                                    screen.fill(BLACK)
-                                    screen.blit(purplepink_pygame,purplepink_rect)
-                                    pygame.display.flip()
-                                    break
+                                    if normal_play==True:
+                                        screen.fill(BLACK)
+                                        screen.blit(purplepink_pygame,purplepink_rect)
+                                        break
+                                    else:
+                                        found_shape=True
+                                        break
                                 else:
                                     shape_num = shape_num+1
                         elif color_range ==11:          #PINK/RED
@@ -548,14 +596,13 @@ while code_run:
                             while shape_num<PinkRed_shapes_tot:
                                 PinkRed_check = PinkRed_shapes_list[shape_num]
                                 if PinkRed_check[Ycoord,Xcoord]==255:
-                                    pinkred = cv2.imread('pinkred_range.png',1)
-                                    #oranges = cv2.resize(oranges_og, (320,240))
-                                    pinkred_pygame = pygame.image.load("pinkred_range.png")
-                                    pinkred_rect = pinkred_pygame.get_rect()
-                                    screen.fill(BLACK)
-                                    screen.blit(pinkred_pygame,pinkred_rect)
-                                    pygame.display.flip()
-                                    break
+                                    if normal_play==True:
+                                        screen.fill(BLACK)
+                                        screen.blit(pinkred_pygame,pinkred_rect)
+                                        break
+                                    else:
+                                        found_shape=True
+                                        break
                                 else:
                                     shape_num = shape_num+1
                         else:           #GREY
@@ -564,110 +611,172 @@ while code_run:
                             while shape_num<Grey_shapes_tot:
                                 Grey_check = Grey_shapes_list[shape_num]
                                 if Grey_check[Ycoord,Xcoord]==255:
-                                    grey= cv2.imread('grey_range.png',1)
-                                    #oranges = cv2.resize(oranges_og, (320,240))
-                                    grey_pygame = pygame.image.load("grey_range.png")
-                                    grey_rect = grey_pygame.get_rect()
-                                    screen.fill(BLACK)
-                                    screen.blit(grey_pygame,grey_rect)
-                                    pygame.display.flip()
-                                    break
+                                    if normal_play==True:
+                                        screen.fill(BLACK)
+                                        screen.blit(grey_pygame,grey_rect)
+                                        break
+                                    else:
+                                        found_shape=True
+                                        break
                                 else:
                                     shape_num = shape_num+1
                         break
                     else:
                         color_range=color_range+1
+                if found_shape==True and free_play ==True:
+                    #display hue screen
+                    screen.fill(BLACK)
+                    screen.blit(all_colors_pygame ,all_colors_rect)
+                    hue_screen=True
                 canvas_screen = not canvas_screen
+                pygame.display.flip()
+            elif hue_screen==True:
+                print('hue_screen=True')
+                #match x,y to hue
+                hue = all_colors[Ycoord,Xcoord]
+                print(hue)
+                hue_int =np.uint8([[[int(hue[0]),int(hue[1]),int(hue[2])]]])
+                print(hue_int)
+                #green = np.uint8([[[0,255,0 ]]])
+                #print(green)
+                hsv_hue = cv2.cvtColor(hue_int,cv2.COLOR_BGR2HSV)
+                print('hsv_hue')
+                print(hsv_hue)
+                print('hsv_hue[0]')
+                print(hsv_hue[0])
+                print('hsv_hue[0][0][1]')
+                print(hsv_hue[0][0][1])
+                screen.fill(BLACK)
+                if hsv_hue[0][0][1]==0:   #grey
+                    screen.blit(grey_pygame,grey_rect)
+                    free_color_range=12
+                elif hsv_hue[0][0][0] >=0 and hsv_hue[0][0][0] <=9:   #RED
+                    screen.blit(reds_pygame,reds_rect)
+                    free_color_range=0
+                elif hsv_hue[0][0][0] >9 and hsv_hue[0][0][0]<=20:     #Orange
+                    screen.blit(oranges_pygame,oranges_rect)
+                    free_color_range=1
+                elif hsv_hue[0][0][0] >20 and hsv_hue[0][0][0]<=30:     #Yellow
+                    screen.blit(yellows_pygame,yellows_rect)
+                    free_color_range=2
+                elif hsv_hue[0][0][0] >30 and hsv_hue[0][0][0]<=47:     #G1
+                    screen.blit(g1_pygame,g1_rect)
+                    free_color_range=3
+                elif hsv_hue[0][0][0] >47 and hsv_hue[0][0][0]<=64:   #G2
+                    screen.blit(g2_pygame,g2_rect)
+                    free_color_range=4
+                elif hsv_hue[0][0][0] >64 and hsv_hue[0][0][0]<=80: #G3
+                    screen.blit(g3_pygame,g3_rect)
+                    free_color_range=5
+                elif hsv_hue[0][0][0] >80 and hsv_hue[0][0][0]<=94:     #B1
+                    screen.blit(b1_pygame,b1_rect)
+                    free_color_range=6
+                elif hsv_hue[0][0][0]>94 and hsv_hue[0][0][0]<=108:    #B2
+                    screen.blit(b2_pygame,b2_rect)
+                    free_color_range=7
+                elif hsv_hue[0][0][0] >108 and hsv_hue[0][0][0]<=122:   #B3
+                    screen.blit(b3_pygame,b3_rect)
+                    free_color_range=8
+                elif hsv_hue[0][0][0] >122 and hsv_hue[0][0][0]<=140:   #Purple
+                     screen.blit(purple_pygame,purple_rect)
+                     free_color_range=9
+                elif hsv_hue[0][0][0] >140 and hsv_hue[0][0][0]<=150:   #purple/pink
+                     screen.blit(purplepink_pygame,purplepink_rect)
+                     free_color_range=10
+                elif hsv_hue[0][0][0] >150 and hsv_hue[0][0][0]<=180:   #pink/red
+                    screen.blit(pinkred_pygame,pinkred_rect)
+                    free_color_range=11
+                hue_screen=False
+                
+                pygame.display.flip()
             else:
                 #find color of pick (x,y)
-                if color_range ==0:             #RED
-                    fillColor = reds[Ycoord,Xcoord]
-                    fillB = int(fillColor[0])
-                    fillG = int(fillColor[1])
-                    fillR = int(fillColor[2])
-                    cv2.drawContours(canvas, [contours_Red[shape_num]], -1, (fillB,fillG,fillR),thickness=-1)
-                elif color_range ==1:           #ORANGE
-                    fillColor = oranges[Ycoord,Xcoord]
-                    fillB = int(fillColor[0])
-                    fillG = int(fillColor[1])
-                    fillR = int(fillColor[2])
-                    cv2.drawContours(canvas, [contours_Orange[shape_num]], -1,  (fillB,fillG,fillR),thickness=-1)
-                elif color_range ==2:           #YELLOW
-                    fillColor = yellows[Ycoord,Xcoord]
-                    fillB = int(fillColor[0])
-                    fillG = int(fillColor[1])
-                    fillR = int(fillColor[2])
-                    cv2.drawContours(canvas, [contours_Yellow[shape_num]], -1,  (fillB,fillG,fillR),thickness=-1)
-                elif color_range ==3:           #G1
-                    fillColor = g1[Ycoord,Xcoord]
-                    fillB = int(fillColor[0])
-                    fillG = int(fillColor[1])
-                    fillR = int(fillColor[2])
-                    cv2.drawContours(canvas, [contours_G1[shape_num]], -1,  (fillB,fillG,fillR),thickness=-1)
-                elif color_range ==4:           #G2
-                    fillColor = g2[Ycoord,Xcoord]
-                    fillB = int(fillColor[0])
-                    fillG = int(fillColor[1])
-                    fillR = int(fillColor[2])
-                    cv2.drawContours(canvas, [contours_G2[shape_num]], -1,  (fillB,fillG,fillR),thickness=-1)
-                elif color_range ==5:           #G3
-                    fillColor = g3[Ycoord,Xcoord]
-                    fillB = int(fillColor[0])
-                    fillG = int(fillColor[1])
-                    fillR = int(fillColor[2])
-                    cv2.drawContours(canvas, [contours_G3[shape_num]], -1,  (fillB,fillG,fillR),thickness=-1)
-                elif color_range ==6:           #B1
-                    fillColor = b1[Ycoord,Xcoord]
-                    fillB = int(fillColor[0])
-                    fillG = int(fillColor[1])
-                    fillR = int(fillColor[2])
-                    cv2.drawContours(canvas, [contours_B1[shape_num]], -1,  (fillB,fillG,fillR),thickness=-1)
-                elif color_range ==7:          # B2
-                    fillColor = b2[Ycoord,Xcoord]
-                    fillB = int(fillColor[0])
-                    fillG = int(fillColor[1])
-                    fillR = int(fillColor[2])
-                    cv2.drawContours(canvas, [contours_B2[shape_num]], -1,  (fillB,fillG,fillR),thickness=-1)
-                elif color_range ==8:           #B3
-                    fillColor = b3[Ycoord,Xcoord]
-                    fillB = int(fillColor[0])
-                    fillG = int(fillColor[1])
-                    fillR = int(fillColor[2])
-
-                    cv2.drawContours(canvas, [contours_B3[shape_num]], -1,  (fillB,fillG,fillR),thickness=-1)
-                elif color_range ==9:           #PURPLE
-                    fillColor = purple[Ycoord,Xcoord]
-                    fillB = int(fillColor[0])
-                    fillG = int(fillColor[1])
-                    fillR = int(fillColor[2])
-                    cv2.drawContours(canvas, [contours_Purple[shape_num]], -1,  (fillB,fillG,fillR),thickness=-1)
-                elif color_range ==10:          #PURPLE/PINK
-                    fillColor = purplepink[Ycoord,Xcoord]
-                    fillB = int(fillColor[0])
-                    fillG = int(fillColor[1])
-                    fillR = int(fillColor[2])
-                    cv2.drawContours(canvas, [contours_PurpPink[shape_num]], -1,  (fillB,fillG,fillR),thickness=-1)
-                elif color_range ==11:          #PINK/RED
-                    fillColor = pinkred[Ycoord,Xcoord]
-                    fillB = int(fillColor[0])
-                    fillG = int(fillColor[1])
-                    fillR = int(fillColor[2])
-                    cv2.drawContours(canvas, [contours_PinkRed[shape_num]], -1,  (fillB,fillG,fillR),thickness=-1)
-                elif color_range ==12:          #GREY
-                    fillColor = grey[Ycoord,Xcoord]
-                    fillB = int(fillColor[0])
-                    fillG = int(fillColor[1])
-                    fillR = int(fillColor[2])
-                    cv2.drawContours(canvas, [contours_Grey[shape_num]], -1,  (fillB,fillG,fillR),thickness=-1)
+                # find fillColor
+                if free_play ==True:
+                    if free_color_range==0:
+                        fillColor=reds[Ycoord,Xcoord]
+                    elif free_color_range ==1:
+                        fillColor=oranges[Ycoord,Xcoord]
+                    elif free_color_range ==2:
+                        fillColor = yellows[Ycoord,Xcoord]
+                    elif free_color_range ==3:
+                        fillColor = g1[Ycoord,Xcoord]
+                    elif free_color_range ==4:
+                         fillColor = g2[Ycoord,Xcoord]
+                    elif free_color_range==5:
+                        fillColor = g3[Ycoord,Xcoord]
+                    elif free_color_range==6:
+                        fillColor = b1[Ycoord,Xcoord]
+                    elif free_color_range==7:
+                        fillColor = b2[Ycoord,Xcoord]
+                    elif free_color_range ==8:
+                        fillColor = b3[Ycoord,Xcoord]
+                    elif free_color_range==9:
+                        fillColor = purple[Ycoord,Xcoord]
+                    elif free_color_range==10:
+                        fillColor = purplepink[Ycoord,Xcoord]
+                    elif free_color_range==11:
+                        fillColor = pinkred[Ycoord,Xcoord]
+                    else:
+                        fillColor = grey[Ycoord,Xcoord]
                 else:
-                    fillColor = resize[Ycoord,Xcoord]
-                # color_range corresponds to which color range the shape choice was from
+                    if color_range==0:
+                        fillColor=reds[Ycoord,Xcoord]
+                    elif color_range ==1:
+                        fillColor=oranges[Ycoord,Xcoord]
+                    elif color_range ==2:
+                        fillColor = yellows[Ycoord,Xcoord]
+                    elif color_range ==3:
+                        fillColor = g1[Ycoord,Xcoord]
+                    elif color_range ==4:
+                         fillColor = g2[Ycoord,Xcoord]
+                    elif color_range==5:
+                        fillColor = g3[Ycoord,Xcoord]
+                    elif color_range==6:
+                        fillColor = b1[Ycoord,Xcoord]
+                    elif color_range==7:
+                        fillColor = b2[Ycoord,Xcoord]
+                    elif color_range ==8:
+                        fillColor = b3[Ycoord,Xcoord]
+                    elif color_range==9:
+                        fillColor = purple[Ycoord,Xcoord]
+                    elif color_range==10:
+                        fillColor = purplepink[Ycoord,Xcoord]
+                    elif color_range==11:
+                        fillColor = pinkred[Ycoord,Xcoord]
+                    else:
+                        fillColor = grey[Ycoord,Xcoord]
                 fillB = int(fillColor[0])
                 fillG = int(fillColor[1])
                 fillR = int(fillColor[2])
+                if color_range ==0:             #RED
+                    cv2.drawContours(canvas, [contours_Red[shape_num]], -1, (fillB,fillG,fillR),thickness=-1)
+                elif color_range ==1:           #ORANGE
+                    cv2.drawContours(canvas, [contours_Orange[shape_num]], -1,  (fillB,fillG,fillR),thickness=-1)
+                elif color_range ==2:           #YELLOW
+                    cv2.drawContours(canvas, [contours_Yellow[shape_num]], -1,  (fillB,fillG,fillR),thickness=-1)
+                elif color_range ==3:           #G1
+                    cv2.drawContours(canvas, [contours_G1[shape_num]], -1,  (fillB,fillG,fillR),thickness=-1)
+                elif color_range ==4:           #G2
+                    cv2.drawContours(canvas, [contours_G2[shape_num]], -1,  (fillB,fillG,fillR),thickness=-1)
+                elif color_range ==5:           #G3
+                    cv2.drawContours(canvas, [contours_G3[shape_num]], -1,  (fillB,fillG,fillR),thickness=-1)
+                elif color_range ==6:           #B1
+                    cv2.drawContours(canvas, [contours_B1[shape_num]], -1,  (fillB,fillG,fillR),thickness=-1)
+                elif color_range ==7:          # B2
+                    cv2.drawContours(canvas, [contours_B2[shape_num]], -1,  (fillB,fillG,fillR),thickness=-1)
+                elif color_range ==8:           #B3
+                    cv2.drawContours(canvas, [contours_B3[shape_num]], -1,  (fillB,fillG,fillR),thickness=-1)
+                elif color_range ==9:           #PURPLE
+                    cv2.drawContours(canvas, [contours_Purple[shape_num]], -1,  (fillB,fillG,fillR),thickness=-1)
+                elif color_range ==10:          #PURPLE/PINK
+                    cv2.drawContours(canvas, [contours_PurpPink[shape_num]], -1,  (fillB,fillG,fillR),thickness=-1)
+                elif color_range ==11:          #PINK/RED
+                    cv2.drawContours(canvas, [contours_PinkRed[shape_num]], -1,  (fillB,fillG,fillR),thickness=-1)
+                elif color_range==12:      #GREY
+                    cv2.drawContours(canvas, [contours_Grey[shape_num]], -1,  (fillB,fillG,fillR),thickness=-1)
                 if color_range <13:
                     draw_screen = True
-                    #cv2.fillPoly(canvas,shape_contour, (fillB,fillG,fillR))
                     cv2.imwrite('canvas.png',canvas)
                     canvasPygame = pygame.image.load("canvas.png")
                     canvas_rect = canvasPygame.get_rect()
