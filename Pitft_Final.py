@@ -1,4 +1,5 @@
-#
+# Pitft_Final.py Final Project PiTFT implementation
+# mm2563, psk92
 
 import pygame
 from pygame.locals import* #for event MOUSE variables
@@ -20,12 +21,9 @@ def GPIO23_callback(channel): #GPIO23
     global draw_screen
     draw_screen = not draw_screen
     if draw_screen==False:
-        #while draw_screen==False:
         screen.fill(BLACK)
         screen.blit(resize_pygame ,resize_rect)
         pygame.display.flip()
-        #display Og Image
-        #enter while loop
         
     else:
         #display canvas
@@ -105,35 +103,13 @@ image3_shrink_py = pygame.transform.scale(image3_pygame,(160,120))
 image3_rect = image3_rect.move(160,0)
 image4_shrink_py = pygame.transform.scale(image4_pygame,(160,120))
 image4_rect = image4_rect.move(160,120)
-#image2_shrink = image2_rect.i
-#screen.fill(BLACK)
-#screen.blit(image1_shrink_py, image1_rect)
-#screen.blit(image2_shrink_py, image2_rect)
-#screen.blit(image3_shrink_py, image3_rect)
-#screen.blit(image4_shrink_py, image4_rect)
-#pygame.display.flip()
 #--------Image Processing--------
 #monitor
 canvas =cv2.imread('aXnc7xn.png',1)#load blank canvas
 shape_canvas = cv2.imread('aXnc7xn.png',1)
-#resize = cv2.imread('fruits.jpg',1)
-#resize = cv2.imread('6ukjvZN.png',1)
-#resize_pygame = pygame.image.load("6ukjvZN.png")
-#resize_rect = resize_pygame.get_rect()
 all_colors = cv2.imread('allcolors.png',1)
 all_colors_pygame = pygame.image.load('allcolors.png')
 all_colors_rect = all_colors_pygame.get_rect()
-#h,w,c = resize.shape
-#canvas = cv2.resize(canvas,(w/3,h/3))
-#screen = pygame.display.set_mode((w/3,h/3))
-#resize = cv2.resize(resize,(w/3,h/3))
-
-#piTFT
-#image = cv2.imread('fruits.jpg',1)
-#image = cv2.imread('njcutuP.png',1)     #load image
-#resize = cv2.resize(image, (320,240))
-#anvas = cv2.resize(canvas, (320,240))
-#hsv_img = cv2.cvtColor(resize, cv2.COLOR_BGR2HSV)   #Conveert from BGR to HSV
 #----Load Color Range Images-------
 reds = cv2.imread('red_range.png',1)
 reds_pygame = pygame.image.load("red_range.png")
@@ -274,8 +250,6 @@ def imageProcessing(hsv_img,resize):
     _,contours_Grey,hier = cv2.findContours(mask_Grey, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
     _,contours_dark,hier = cv2.findContours(mask_dark, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
 
-    #contours_B3=contours_B3[-2]
-
     contours_all = [contours_Red, contours_Orange, contours_Yellow, contours_G1, contours_G2, contours_G3, contours_B1, contours_B2, contours_B3, contours_Purple, contours_PurpPink, contours_PinkRed, contours_Grey,contours_dark]
     c=0
     while c <13:
@@ -285,8 +259,6 @@ def imageProcessing(hsv_img,resize):
     cv2.imwrite('canvas.png',canvas)
     canvasPygame = pygame.image.load("canvas.png")
     canvas_rect = canvasPygame.get_rect()
-    #screen.blit(canvasPygame, canvas_rect)
-    #pygame.display.flip()
     #----------END IMAGE PROCESSING----------
 
     #----------Differentiate Shapes---------
@@ -295,7 +267,6 @@ def imageProcessing(hsv_img,resize):
     red_shapes_list = []
     while shape < red_shapes_tot:
         cv2.drawContours(shape_canvas, [contours_Red[shape]], -1, (0,0,0),thickness=-1)
-        #cv2.fillPoly(shape_canvas,contours_Red[shape], (0,0,0))
         mask_red_shape = cv2.inRange(shape_canvas, (0,0,0),(180,255,255))
         red_shapes_list.append(mask_red_shape)
         shape_canvas[:]=(255,255,255)
@@ -370,7 +341,6 @@ def imageProcessing(hsv_img,resize):
     #contours_b = contours_B3[1]
     while shape < B3_shapes_tot:
         cv2.drawContours(shape_canvas, [contours_B3[shape]], -1, (0,0,0),thickness=-1)
-        #cv2.imshow('filledshape',shape_canvas)
         mask_B3_shape = cv2.inRange(shape_canvas, (0,0,0),(180,255,255))
         B3_shapes_list.append(mask_B3_shape)
         shape_canvas[:]=(255,255,255)
@@ -389,9 +359,7 @@ def imageProcessing(hsv_img,resize):
     PurpPink_shapes_tot = len(contours_PurpPink)  #PurpPink
     PurpPink_shapes_list = []
     while shape < PurpPink_shapes_tot:
-        #print(shape)
         cv2.drawContours(shape_canvas, [contours_PurpPink[shape]], -1, (0,0,0),thickness=-1)
-        #cv2.fillPoly(shape_canvas,contours_Red[shape], (0,0,0))
         mask_PurpPink_shape = cv2.inRange(shape_canvas, (0,0,0),(180,255,255))
         PurpPink_shapes_list.append(mask_PurpPink_shape)
         shape_canvas[:]=(255,255,255)
@@ -426,14 +394,6 @@ def imageProcessing(hsv_img,resize):
         shape_canvas[:]=(255,255,255)
         shape = shape +1
 
-#cv2.imshow('canvas',shape_canvas)
-#cv2.imshow('mask',B3_shapes_list[0])
-#cv2.imshow('mask1',B3_shapes_list[1])
-#cv2.imshow('mask_Grey',Grey_shapes_list[0])
-#cv2.imshow('mG2',Grey_shapes_list[1])
-#cv2.imshow('mG3',Grey_shapes_list[2])
-#print(Grey_shapes_tot)
-#cv2.waitKey(0)
 #-------END Differentiate Shapes-------
 
 #-------MAIN-----------
@@ -552,12 +512,10 @@ while code_run:
                 screen.blit(canvasPygame,canvas_rect)
                 pygame.display.flip()
 
-                #hsv_img = cv2.cvtColor(resize, cv2.COLOR_BGR2HSV)   #Conveert from BGR to HSV
             elif canvas_screen ==True:
                 found_shape=False
                 color_range=0
                 while color_range <13:
-                    print(color_range)
                     mask_check=mask_all[color_range]
                     if mask_check[Ycoord,Xcoord] ==255:
                         if color_range ==0:             #RED
@@ -624,8 +582,6 @@ while code_run:
                         elif color_range ==4:           #G2
                             #search shapes
                             shape_num =0
-                            print('G2_shapes_tot')
-                            print(G2_shapes_tot)
                             while shape_num<G2_shapes_tot:
                                 G2_check = G2_shapes_list[shape_num]
                                 if G2_check[Ycoord,Xcoord]==255:
@@ -642,12 +598,8 @@ while code_run:
                         elif color_range ==5:           #G3
                             #search shapes
                             shape_num =0
-                            print('G3')
-                            print(G3_shapes_tot)
                             while shape_num<G3_shapes_tot:
                                 G3_check = G3_shapes_list[shape_num]
-                                print(shape_num)
-                                print(G3_check[Ycoord,Xcoord])
                                 if G3_check[Ycoord,Xcoord]==255:
                                     if normal_play==True:
                                         screen.fill(BLACK)
@@ -661,8 +613,6 @@ while code_run:
                         elif color_range ==6:           #B1
                             #search shapes
                             shape_num =0
-                            print('B1')
-                            print(B1_shapes_tot)
                             while shape_num<B1_shapes_tot:
                                 B1_check = B1_shapes_list[shape_num]
                                 if B1_check[Ycoord,Xcoord]==255:
@@ -773,26 +723,13 @@ while code_run:
                     screen.fill(BLACK)
                     screen.blit(all_colors_pygame ,all_colors_rect)
                     hue_screen=True
-                print('canvas_screen')
-                print(canvas_screen)
                 canvas_screen = not canvas_screen
                 pygame.display.flip()
             elif hue_screen==True:
-                print('hue_screen=True')
                 #match x,y to hue
                 hue = all_colors[Ycoord,Xcoord]
-                print(hue)
                 hue_int =np.uint8([[[int(hue[0]),int(hue[1]),int(hue[2])]]])
-                print(hue_int)
-                #green = np.uint8([[[0,255,0 ]]])
-                #print(green)
                 hsv_hue = cv2.cvtColor(hue_int,cv2.COLOR_BGR2HSV)
-                print('hsv_hue')
-                print(hsv_hue)
-                print('hsv_hue[0]')
-                print(hsv_hue[0])
-                print('hsv_hue[0][0][1]')
-                print(hsv_hue[0][0][1])
                 screen.fill(BLACK)
                 if hsv_hue[0][0][1]==0:   #grey
                     screen.blit(grey_pygame,grey_rect)
@@ -932,6 +869,5 @@ while code_run:
                     pygame.display.flip()
                 canvas_screen = not canvas_screen
 
-            #cv2.imshow('Fill',canvas)
-            #cv2.waitKey(0)
 GPIO.cleanup()
+

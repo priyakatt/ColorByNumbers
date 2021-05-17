@@ -1,4 +1,5 @@
-#
+# Vnc_Final.py Final Project Vnc implementation
+# mm2563, psk92
 
 import pygame
 from pygame.locals import* #for event MOUSE variables
@@ -20,12 +21,9 @@ def GPIO23_callback(channel): #GPIO23
     global draw_screen
     draw_screen = not draw_screen
     if draw_screen==False:
-        #while draw_screen==False:
         screen.fill(BLACK)
         screen.blit(resize_pygame ,resize_rect)
         pygame.display.flip()
-        #display Og Image
-        #enter while loop
         
     else:
         #display canvas
@@ -57,26 +55,27 @@ GPIO.add_event_detect(22, GPIO.FALLING, callback=GPIO22_callback, bouncetime=300
 
 
 #---------PiTFT/VNC-------
-os.putenv('SDL_VIDEODRIVER','fbcon') #Display on PiTFT
-os.putenv('SDL_FBDEV','/dev/fb1')
-os.putenv('SDL_MOUSEDRV','TSLIB') #Track mouse clicks on PiTFT
-os.putenv('SDL_MOUSEDEV','/dev/input/touchscreen')
+#os.putenv('SDL_VIDEODRIVER','fbcon') #Display on PiTFT
+#os.putenv('SDL_FBDEV','/dev/fb1')
+#os.putenv('SDL_MOUSEDRV','TSLIB') #Track mouse clicks on PiTFT
+#os.putenv('SDL_MOUSEDEV','/dev/input/touchscreen')
 
 pygame.init()   #initialize pygame library
-#pygame.mouse.set_visible(True) #turn cursor on (VNC)
-pygame.mouse.set_visible(False) #turn cursor off (piTFT)
+pygame.mouse.set_visible(True) #turn cursor on (VNC)
+#pygame.mouse.set_visible(False) #turn cursor off (piTFT)
 WHITE = 255,255,255
 BLACK = 0,0,0
-screen = pygame.display.set_mode((320,240))
+scale=3
+screen = pygame.display.set_mode((320*scale,240*scale))
 
 Xcoord=0    #initialize x,y
 Ycoord=0    
 screen.fill(BLACK) #Erase workspace
 #----------Button-------
 pygame.init()
-my_font=pygame.font.Font(None,30)
-my_buttons = {'Color By Numbers':(160, 80), 'Free Color':(160,160)}    #buttons
-menu_buttons = {'Change Mode':(160, 60), 'New Image':(160,120),'Save Image':(160,180)}    #Menu buttons
+my_font=pygame.font.Font(None,50)
+my_buttons = {'Color By Numbers':(160* scale,80*scale), 'Free Color':(160*scale,160*scale)}    #buttons
+menu_buttons = {'Change Mode':(160*scale, 60*scale), 'New Image':(160*scale,120*scale),'Save Image':(160*scale,180*scale)}    #Menu buttons
 
 screen.fill(BLACK) #Erase workspace
 
@@ -97,82 +96,91 @@ image4_pygame = pygame.image.load("6ukjvZN.png")
 image4_rect = image4_pygame.get_rect()
 
 #Shrink
-image1_shrink_py = pygame.transform.scale(image1_pygame,(160,120))
+image1_shrink_py = pygame.transform.scale(image1_pygame,(160*scale,120*scale))
 image1_rect = image1_rect.move(0,0)
-image2_shrink_py = pygame.transform.scale(image2_pygame,(160,120))
-image2_rect = image2_rect.move(0,120)
-image3_shrink_py = pygame.transform.scale(image3_pygame,(160,120))
-image3_rect = image3_rect.move(160,0)
-image4_shrink_py = pygame.transform.scale(image4_pygame,(160,120))
-image4_rect = image4_rect.move(160,120)
-#image2_shrink = image2_rect.i
-#screen.fill(BLACK)
-#screen.blit(image1_shrink_py, image1_rect)
-#screen.blit(image2_shrink_py, image2_rect)
-#screen.blit(image3_shrink_py, image3_rect)
-#screen.blit(image4_shrink_py, image4_rect)
-#pygame.display.flip()
+image2_shrink_py = pygame.transform.scale(image2_pygame,(160*scale,120*scale))
+image2_rect = image2_rect.move(0,120*scale)
+image3_shrink_py = pygame.transform.scale(image3_pygame,(160*scale,120*scale))
+image3_rect = image3_rect.move(160*scale,0)
+image4_shrink_py = pygame.transform.scale(image4_pygame,(160*scale,120*scale))
+image4_rect = image4_rect.move(160*scale,120*scale)
 #--------Image Processing--------
 #monitor
 canvas =cv2.imread('aXnc7xn.png',1)#load blank canvas
+canvas = cv2.resize(canvas,(320*scale,240*scale))
 shape_canvas = cv2.imread('aXnc7xn.png',1)
-#resize = cv2.imread('fruits.jpg',1)
-#resize = cv2.imread('6ukjvZN.png',1)
-#resize_pygame = pygame.image.load("6ukjvZN.png")
-#resize_rect = resize_pygame.get_rect()
-all_colors = cv2.imread('allcolors.png',1)
-all_colors_pygame = pygame.image.load('allcolors.png')
-all_colors_rect = all_colors_pygame.get_rect()
-#h,w,c = resize.shape
-#canvas = cv2.resize(canvas,(w/3,h/3))
-#screen = pygame.display.set_mode((w/3,h/3))
-#resize = cv2.resize(resize,(w/3,h/3))
+shape_canvas = cv2.resize(shape_canvas,(320*scale,240*scale))
 
-#piTFT
-#image = cv2.imread('fruits.jpg',1)
-#image = cv2.imread('njcutuP.png',1)     #load image
-#resize = cv2.resize(image, (320,240))
-#anvas = cv2.resize(canvas, (320,240))
-#hsv_img = cv2.cvtColor(resize, cv2.COLOR_BGR2HSV)   #Conveert from BGR to HSV
+all_colors = cv2.imread('allcolors.png',1)
+all_colors = cv2.resize(all_colors,(320*scale,240*scale))
+all_colors_pygame = pygame.image.load('allcolors.png')
+all_colors_pygame = pygame.transform.scale(all_colors_pygame,(320*scale,240*scale))
+all_colors_rect = all_colors_pygame.get_rect()
 #----Load Color Range Images-------
 reds = cv2.imread('red_range.png',1)
+reds = cv2.resize(reds,(320*scale,240*scale))
 reds_pygame = pygame.image.load("red_range.png")
+reds_pygame = pygame.transform.scale(reds_pygame,(320*scale,240*scale))
 reds_rect = reds_pygame.get_rect()
 oranges = cv2.imread('orange_range.png',1)
+oranges = cv2.resize(oranges,(320*scale,240*scale))
 oranges_pygame = pygame.image.load("orange_range.png")
+oranges_pygame = pygame.transform.scale(oranges_pygame,(320*scale,240*scale))
 oranges_rect = oranges_pygame.get_rect()
 yellows= cv2.imread('yellow_range.png',1)
+yellows = cv2.resize(yellows,(320*scale,240*scale))
 yellows_pygame = pygame.image.load("yellow_range.png")
+yellows_pygame = pygame.transform.scale(yellows_pygame,(320*scale,240*scale))
 yellows_rect = yellows_pygame.get_rect()
 g1= cv2.imread('g1_range.png',1)
+g1 = cv2.resize(g1,(320*scale,240*scale))
 g1_pygame = pygame.image.load("g1_range.png")
+g1_pygame = pygame.transform.scale(g1_pygame,(320*scale,240*scale))
 g1_rect = g1_pygame.get_rect()
 g2= cv2.imread('g2_range.png',1)
+g2 = cv2.resize(g2,(320*scale,240*scale))
 g2_pygame = pygame.image.load("g2_range.png")
+g2_pygame = pygame.transform.scale(g2_pygame,(320*scale,240*scale))
 g2_rect = g2_pygame.get_rect()
 g3 = cv2.imread('g3_range.png',1)
+g3 = cv2.resize(g3,(320*scale,240*scale))
 g3_pygame = pygame.image.load("g3_range.png")
+g3_pygame = pygame.transform.scale(g3_pygame,(320*scale,240*scale))
 g3_rect = g3_pygame.get_rect()
 b1 = cv2.imread('b1_range.png',1)
+b1 = cv2.resize(b1,(320*scale,240*scale))
 b1_pygame = pygame.image.load("b1_range.png")
+b1_pygame = pygame.transform.scale(b1_pygame,(320*scale,240*scale))
 b1_rect = b1_pygame.get_rect()
 b2= cv2.imread('b2_range.png',1)
+b2 = cv2.resize(b2,(320*scale,240*scale))
 b2_pygame = pygame.image.load("b2_range.png")
+b2_pygame = pygame.transform.scale(b2_pygame,(320*scale,240*scale))
 b2_rect = b2_pygame.get_rect()
 b3 = cv2.imread('b3_range.png',1)
+b3 = cv2.resize(b3,(320*scale,240*scale))
 b3_pygame = pygame.image.load("b3_range.png")
+b3_pygame = pygame.transform.scale(b3_pygame,(320*scale,240*scale))
 b3_rect = b3_pygame.get_rect()
 purple= cv2.imread('purple_range.png',1)
+purple = cv2.resize(purple,(320*scale,240*scale))
 purple_pygame = pygame.image.load("purple_range.png")
+purple_pygame = pygame.transform.scale(purple_pygame,(320*scale,240*scale))
 purple_rect = purple_pygame.get_rect()
 purplepink = cv2.imread('purplepink_range.png',1)
+purplepink = cv2.resize(purplepink,(320*scale,240*scale))
 purplepink_pygame = pygame.image.load("purplepink_range.png")
+purplepink_pygame = pygame.transform.scale(purplepink_pygame,(320*scale,240*scale))
 purplepink_rect = purplepink_pygame.get_rect()
 pinkred = cv2.imread('pinkred_range.png',1)
+pinkred = cv2.resize(pinkred,(320*scale,240*scale))
 pinkred_pygame = pygame.image.load("pinkred_range.png")
+pinkred_pygame = pygame.transform.scale(pinkred_pygame,(320*scale,240*scale))
 pinkred_rect = pinkred_pygame.get_rect()
 grey= cv2.imread('grey_range.png',1)
+grey = cv2.resize(grey,(320*scale,240*scale))
 grey_pygame = pygame.image.load("grey_range.png")
+grey_pygame = pygame.transform.scale(grey_pygame,(320*scale,240*scale))
 grey_rect = grey_pygame.get_rect()
 #--------Set Color Ranges-------
 #Red
@@ -274,8 +282,6 @@ def imageProcessing(hsv_img,resize):
     _,contours_Grey,hier = cv2.findContours(mask_Grey, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
     _,contours_dark,hier = cv2.findContours(mask_dark, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
 
-    #contours_B3=contours_B3[-2]
-
     contours_all = [contours_Red, contours_Orange, contours_Yellow, contours_G1, contours_G2, contours_G3, contours_B1, contours_B2, contours_B3, contours_Purple, contours_PurpPink, contours_PinkRed, contours_Grey,contours_dark]
     c=0
     while c <13:
@@ -285,8 +291,6 @@ def imageProcessing(hsv_img,resize):
     cv2.imwrite('canvas.png',canvas)
     canvasPygame = pygame.image.load("canvas.png")
     canvas_rect = canvasPygame.get_rect()
-    #screen.blit(canvasPygame, canvas_rect)
-    #pygame.display.flip()
     #----------END IMAGE PROCESSING----------
 
     #----------Differentiate Shapes---------
@@ -295,7 +299,6 @@ def imageProcessing(hsv_img,resize):
     red_shapes_list = []
     while shape < red_shapes_tot:
         cv2.drawContours(shape_canvas, [contours_Red[shape]], -1, (0,0,0),thickness=-1)
-        #cv2.fillPoly(shape_canvas,contours_Red[shape], (0,0,0))
         mask_red_shape = cv2.inRange(shape_canvas, (0,0,0),(180,255,255))
         red_shapes_list.append(mask_red_shape)
         shape_canvas[:]=(255,255,255)
@@ -370,7 +373,6 @@ def imageProcessing(hsv_img,resize):
     #contours_b = contours_B3[1]
     while shape < B3_shapes_tot:
         cv2.drawContours(shape_canvas, [contours_B3[shape]], -1, (0,0,0),thickness=-1)
-        #cv2.imshow('filledshape',shape_canvas)
         mask_B3_shape = cv2.inRange(shape_canvas, (0,0,0),(180,255,255))
         B3_shapes_list.append(mask_B3_shape)
         shape_canvas[:]=(255,255,255)
@@ -389,9 +391,7 @@ def imageProcessing(hsv_img,resize):
     PurpPink_shapes_tot = len(contours_PurpPink)  #PurpPink
     PurpPink_shapes_list = []
     while shape < PurpPink_shapes_tot:
-        #print(shape)
         cv2.drawContours(shape_canvas, [contours_PurpPink[shape]], -1, (0,0,0),thickness=-1)
-        #cv2.fillPoly(shape_canvas,contours_Red[shape], (0,0,0))
         mask_PurpPink_shape = cv2.inRange(shape_canvas, (0,0,0),(180,255,255))
         PurpPink_shapes_list.append(mask_PurpPink_shape)
         shape_canvas[:]=(255,255,255)
@@ -426,14 +426,6 @@ def imageProcessing(hsv_img,resize):
         shape_canvas[:]=(255,255,255)
         shape = shape +1
 
-#cv2.imshow('canvas',shape_canvas)
-#cv2.imshow('mask',B3_shapes_list[0])
-#cv2.imshow('mask1',B3_shapes_list[1])
-#cv2.imshow('mask_Grey',Grey_shapes_list[0])
-#cv2.imshow('mG2',Grey_shapes_list[1])
-#cv2.imshow('mG3',Grey_shapes_list[2])
-#print(Grey_shapes_tot)
-#cv2.waitKey(0)
 #-------END Differentiate Shapes-------
 
 #-------MAIN-----------
@@ -462,7 +454,7 @@ while code_run:
             Xcoord=x
             Ycoord=y
             if start_screen==True:
-                if Ycoord<120:
+                if Ycoord<120*scale:
                     normal_play=True
                     free_play=False
                 else:
@@ -482,7 +474,7 @@ while code_run:
                     screen.blit(canvasPygame ,canvas_rect)
                     pygame.display.flip()
             elif menu_screen==True:     #New Mode
-                if Ycoord<=80:
+                if Ycoord<=80*scale:
                     print('New Mode')
                     start_screen=True
                     screen.fill(BLACK) #Erase workspace
@@ -495,11 +487,13 @@ while code_run:
 
                     pygame.display.flip()   #display working screen surface
 
-                elif Ycoord>80 and Ycoord <160:     #New Image
+                elif Ycoord>80*scale and Ycoord <160*scale:     #New Image
                     pick_image_screen=True
                     print('New Image')
                     canvas =cv2.imread('aXnc7xn.png',1)#load blank canvas
+                    canvas = cv2.resize(canvas,(320*scale,240*scale))
                     canvasPygame = pygame.image.load("canvas.png")
+                    canvasPygame = pygame.transform.scale(canvasPygame,(320*scale,240*scale))
                     canvas_rect = canvasPygame.get_rect()
                     screen.fill(BLACK)
                     screen.blit(image1_shrink_py, image1_rect)
@@ -507,7 +501,7 @@ while code_run:
                     screen.blit(image3_shrink_py, image3_rect)
                     screen.blit(image4_shrink_py, image4_rect)
                     pygame.display.flip()
-                elif Ycoord>=160:    #save image
+                elif Ycoord>=160*scale:    #save image
                     print('save image')
                     pygame.image.save(canvasPygame, 'user_image.png')
 
@@ -515,35 +509,35 @@ while code_run:
 
             elif pick_image_screen==True:
                 #display 4 images
-                if Xcoord<160 and Ycoord<120: #image 1
+                if Xcoord<160*scale and Ycoord<120*scale: #image 1
                     resize = cv2.imread('njcutuP.png',1)
-                    resize = cv2.resize(resize, (320,240))
+                    resize = cv2.resize(resize, (320*scale,240*scale))
                     resize_pygame = pygame.image.load('njcutuP.png')
-                    resize_pygame =  pygame.transform.scale(resize_pygame,(320,240))
+                    resize_pygame =  pygame.transform.scale(resize_pygame,(320*scale,240*scale))
                     resize_rect = resize_pygame.get_rect()
                     hsv_img = cv2.cvtColor(resize, cv2.COLOR_BGR2HSV)
                     imageProcessing(hsv_img,resize)
-                elif Xcoord>160 and Ycoord <120: #Image 3
+                elif Xcoord>160*scale and Ycoord <120*scale: #Image 3
                     resize = cv2.imread('puzzle.png',1)
-                    resize = cv2.resize(resize, (320,240))
+                    resize = cv2.resize(resize, (320*scale,240*scale))
                     resize_pygame = pygame.image.load('puzzle.png')
-                    resize_pygame =  pygame.transform.scale(resize_pygame,(320,240))
+                    resize_pygame =  pygame.transform.scale(resize_pygame,(320*scale,240*scale))
                     resize_rect = resize_pygame.get_rect()
                     hsv_img = cv2.cvtColor(resize, cv2.COLOR_BGR2HSV)
                     imageProcessing(hsv_img,resize)
-                elif Xcoord <160 and Ycoord >120: #Image 2
+                elif Xcoord <160*scale and Ycoord >120*scale: #Image 2
                     resize = cv2.imread('Cornell.jpg',1)
-                    resize = cv2.resize(resize, (320,240))
+                    resize = cv2.resize(resize, (320*scale,240*scale))
                     resize_pygame = pygame.image.load('Cornell.jpg')
-                    resize_pygame =  pygame.transform.scale(resize_pygame,(320,240))
+                    resize_pygame =  pygame.transform.scale(resize_pygame,(320*scale,240*scale))
                     resize_rect = resize_pygame.get_rect()
                     hsv_img = cv2.cvtColor(resize, cv2.COLOR_BGR2HSV)
                     imageProcessing(hsv_img,resize)
                 else: #Image 4
                     resize = cv2.imread('6ukjvZN.png',1)
-                    resize = cv2.resize(resize, (320,240))
+                    resize = cv2.resize(resize, (320*scale,240*scale))
                     resize_pygame = pygame.image.load('6ukjvZN.png')
-                    resize_pygame =  pygame.transform.scale(resize_pygame,(320,240))
+                    resize_pygame =  pygame.transform.scale(resize_pygame,(320*scale,240*scale))
                     resize_rect = resize_pygame.get_rect()
                     hsv_img = cv2.cvtColor(resize, cv2.COLOR_BGR2HSV)
                     imageProcessing(hsv_img,resize)
@@ -552,12 +546,10 @@ while code_run:
                 screen.blit(canvasPygame,canvas_rect)
                 pygame.display.flip()
 
-                #hsv_img = cv2.cvtColor(resize, cv2.COLOR_BGR2HSV)   #Conveert from BGR to HSV
             elif canvas_screen ==True:
                 found_shape=False
                 color_range=0
                 while color_range <13:
-                    print(color_range)
                     mask_check=mask_all[color_range]
                     if mask_check[Ycoord,Xcoord] ==255:
                         if color_range ==0:             #RED
@@ -624,8 +616,6 @@ while code_run:
                         elif color_range ==4:           #G2
                             #search shapes
                             shape_num =0
-                            print('G2_shapes_tot')
-                            print(G2_shapes_tot)
                             while shape_num<G2_shapes_tot:
                                 G2_check = G2_shapes_list[shape_num]
                                 if G2_check[Ycoord,Xcoord]==255:
@@ -642,12 +632,8 @@ while code_run:
                         elif color_range ==5:           #G3
                             #search shapes
                             shape_num =0
-                            print('G3')
-                            print(G3_shapes_tot)
                             while shape_num<G3_shapes_tot:
                                 G3_check = G3_shapes_list[shape_num]
-                                print(shape_num)
-                                print(G3_check[Ycoord,Xcoord])
                                 if G3_check[Ycoord,Xcoord]==255:
                                     if normal_play==True:
                                         screen.fill(BLACK)
@@ -661,8 +647,6 @@ while code_run:
                         elif color_range ==6:           #B1
                             #search shapes
                             shape_num =0
-                            print('B1')
-                            print(B1_shapes_tot)
                             while shape_num<B1_shapes_tot:
                                 B1_check = B1_shapes_list[shape_num]
                                 if B1_check[Ycoord,Xcoord]==255:
@@ -773,26 +757,13 @@ while code_run:
                     screen.fill(BLACK)
                     screen.blit(all_colors_pygame ,all_colors_rect)
                     hue_screen=True
-                print('canvas_screen')
-                print(canvas_screen)
                 canvas_screen = not canvas_screen
                 pygame.display.flip()
             elif hue_screen==True:
-                print('hue_screen=True')
                 #match x,y to hue
                 hue = all_colors[Ycoord,Xcoord]
-                print(hue)
                 hue_int =np.uint8([[[int(hue[0]),int(hue[1]),int(hue[2])]]])
-                print(hue_int)
-                #green = np.uint8([[[0,255,0 ]]])
-                #print(green)
                 hsv_hue = cv2.cvtColor(hue_int,cv2.COLOR_BGR2HSV)
-                print('hsv_hue')
-                print(hsv_hue)
-                print('hsv_hue[0]')
-                print(hsv_hue[0])
-                print('hsv_hue[0][0][1]')
-                print(hsv_hue[0][0][1])
                 screen.fill(BLACK)
                 if hsv_hue[0][0][1]==0:   #grey
                     screen.blit(grey_pygame,grey_rect)
@@ -932,6 +903,4 @@ while code_run:
                     pygame.display.flip()
                 canvas_screen = not canvas_screen
 
-            #cv2.imshow('Fill',canvas)
-            #cv2.waitKey(0)
 GPIO.cleanup()
