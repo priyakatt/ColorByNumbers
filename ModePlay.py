@@ -73,8 +73,8 @@ pygame.display.flip()   #display working screen surface
 canvas =cv2.imread('aXnc7xn.png',1)#load blank canvas
 shape_canvas = cv2.imread('aXnc7xn.png',1)
 #resize = cv2.imread('fruits.jpg',1)
-resize = cv2.imread('6ukjvZN.png',1)
-resize_pygame = pygame.image.load("6ukjvZN.png")
+resize = cv2.imread('njcutuP.png',1)
+resize_pygame = pygame.image.load("njcutuP.png")
 resize_rect = resize_pygame.get_rect()
 all_colors = cv2.imread('allcolors.png',1)
 all_colors_pygame = pygame.image.load('allcolors.png')
@@ -87,7 +87,7 @@ all_colors_rect = all_colors_pygame.get_rect()
 #piTFT
 #image = cv2.imread('fruits.jpg',1)
 #image = cv2.imread('njcutuP.png',1)     #load image
-#resize = cv2.resize(image, (320,240))
+resize = cv2.resize(resize, (320,240))
 #anvas = cv2.resize(canvas, (320,240))
 hsv_img = cv2.cvtColor(resize, cv2.COLOR_BGR2HSV)   #Conveert from BGR to HSV
 #----Load Color Range Images-------
