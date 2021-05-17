@@ -14,6 +14,7 @@ timeOut = 120    #timeout after 120 seconds
 GPIO.setmode(GPIO.BCM) # set mode for broadcom numbering
 GPIO.setup(27, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 GPIO.setup(23, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+GPIO.setup(22, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
 def GPIO23_callback(channel): #GPIO23
     global draw_screen
@@ -36,8 +37,23 @@ def GPIO27_callback(channel): #GPIO27 quit
     global code_run
     code_run=False  #set flag to 0 to tell main code to end
 
+def GPIO22_callback(channel): #GPIO22
+    global menu_screen
+    if start_screen==True or pick_image_screen==True:
+        menu_screen=False
+    else:
+        menu_screen=True
+        screen.fill(BLACK)
+        for my_text, text_pos in menu_buttons.items():    #cycle through dictionary to load value
+            text_surface = my_font.render(my_text, True, WHITE) #setup button surface
+            rect = text_surface.get_rect(center=text_pos)
+            screen.blit(text_surface, rect) #combine surfaces
+        pygame.display.flip()   #display working screen surface
+
+
 GPIO.add_event_detect(27, GPIO.FALLING, callback=GPIO27_callback, bouncetime=300)   #GPIO27 quits script
 GPIO.add_event_detect(23, GPIO.FALLING, callback=GPIO23_callback, bouncetime=300)   #GPIO23 changes screen
+GPIO.add_event_detect(22, GPIO.FALLING, callback=GPIO22_callback, bouncetime=300)   #GPIO22 changes screen
 
 
 #---------PiTFT/VNC-------
@@ -60,6 +76,8 @@ screen.fill(BLACK) #Erase workspace
 pygame.init()
 my_font=pygame.font.Font(None,30)
 my_buttons = {'Color By Numbers':(160, 80), 'Free Color':(160,160)}    #buttons
+menu_buttons = {'Change Mode':(160, 60), 'New Image':(160,120),'Save Image':(160,180)}    #Menu buttons
+
 screen.fill(BLACK) #Erase workspace
 
 for my_text, text_pos in my_buttons.items():    #cycle through dictionary to load value
@@ -428,6 +446,8 @@ hue_screen=False
 free_color_range=13
 start_screen=True
 pick_image_screen=False
+menu_screen=False
+new_mode=False
 while code_run:
     current_time = time.time()
     elapsed_time = current_time - start_time     #calculate time elapsed
@@ -445,18 +465,53 @@ while code_run:
                 if Ycoord<120:
                     normal_play=True
                     free_play=False
-                    pick_image_screen=True
                 else:
                     normal_play=False
                     free_play=True
-                    pick_image_screen=True
                 start_screen= not start_screen
-                screen.fill(BLACK)
-                screen.blit(image1_shrink_py, image1_rect)
-                screen.blit(image2_shrink_py, image2_rect)
-                screen.blit(image3_shrink_py, image3_rect)
-                screen.blit(image4_shrink_py, image4_rect)
-                pygame.display.flip()
+                if new_mode ==False:
+                    pick_image_screen=True
+                    screen.fill(BLACK)
+                    screen.blit(image1_shrink_py, image1_rect)
+                    screen.blit(image2_shrink_py, image2_rect)
+                    screen.blit(image3_shrink_py, image3_rect)
+                    screen.blit(image4_shrink_py, image4_rect)
+                    pygame.display.flip()
+                else:
+                    screen.fill(BLACK)
+                    screen.blit(canvasPygame ,canvas_rect)
+                    pygame.display.flip()
+            elif menu_screen==True:     #New Mode
+                if Ycoord<=80:
+                    print('New Mode')
+                    start_screen=True
+                    screen.fill(BLACK) #Erase workspace
+                    new_mode = True
+
+                    for my_text, text_pos in my_buttons.items():    #cycle through dictionary to load value
+                        text_surface = my_font.render(my_text, True, WHITE) #setup button surface
+                        rect = text_surface.get_rect(center=text_pos)
+                        screen.blit(text_surface, rect) #combine surfaces
+
+                    pygame.display.flip()   #display working screen surface
+
+                elif Ycoord>80 and Ycoord <160:     #New Image
+                    pick_image_screen=True
+                    print('New Image')
+                    canvas =cv2.imread('aXnc7xn.png',1)#load blank canvas
+                    canvasPygame = pygame.image.load("canvas.png")
+                    canvas_rect = canvasPygame.get_rect()
+                    screen.fill(BLACK)
+                    screen.blit(image1_shrink_py, image1_rect)
+                    screen.blit(image2_shrink_py, image2_rect)
+                    screen.blit(image3_shrink_py, image3_rect)
+                    screen.blit(image4_shrink_py, image4_rect)
+                    pygame.display.flip()
+                elif Ycoord>=160:    #save image
+                    print('save image')
+                    pygame.image.save(canvasPygame, 'user_image.png')
+
+                menu_screen=False
 
             elif pick_image_screen==True:
                 #display 4 images
@@ -880,4 +935,3 @@ while code_run:
             #cv2.imshow('Fill',canvas)
             #cv2.waitKey(0)
 GPIO.cleanup()
-
