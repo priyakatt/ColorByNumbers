@@ -10,7 +10,7 @@ import cv2
 import numpy as np
 
 start_time = time.time()    #start time
-timeOut = 120    #timeout after 120 seconds
+timeOut = 420    #timeout after 120 seconds
 #--------GPIO---------
 GPIO.setmode(GPIO.BCM) # set mode for broadcom numbering
 GPIO.setup(27, GPIO.IN, pull_up_down=GPIO.PUD_UP)
@@ -223,8 +223,8 @@ dark_PinkRed = np.array([179,255,255])
 light_Grey = np.array([0,0.0,64])
 dark_Grey = np.array([0,0.0,229])
 #Dark
-light_dark = np.array([0,45,20])
-dark_dark = np.array([179,101,153])
+light_dark = np.array([0,0,0])
+dark_dark = np.array([0,101,64])
 
 def imageProcessing(hsv_img,resize):
     global canvasPygame, canvas_rect
@@ -895,6 +895,9 @@ while code_run:
                     cv2.drawContours(canvas, [contours_Grey[shape_num]], -1,  (fillB,fillG,fillR),thickness=-1)
                 if color_range <13:
                     draw_screen = True
+                    cv2.drawContours(canvas, contours_all[12], -1, (0,0,0), thickness = 1)
+                    cv2.drawContours(canvas, contours_all[13], -1, (0,0,0), thickness = -1)
+
                     cv2.imwrite('canvas.png',canvas)
                     canvasPygame = pygame.image.load("canvas.png")
                     canvas_rect = canvasPygame.get_rect()

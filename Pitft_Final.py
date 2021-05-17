@@ -861,6 +861,9 @@ while code_run:
                     cv2.drawContours(canvas, [contours_Grey[shape_num]], -1,  (fillB,fillG,fillR),thickness=-1)
                 if color_range <13:
                     draw_screen = True
+                    cv2.drawContours(canvas, contours_all[12], -1, (0,0,0), thickness = 1)
+                    cv2.drawContours(canvas, contours_all[13], -1, (0,0,0), thickness = -1)
+
                     cv2.imwrite('canvas.png',canvas)
                     canvasPygame = pygame.image.load("canvas.png")
                     canvas_rect = canvasPygame.get_rect()
