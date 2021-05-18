@@ -10,7 +10,7 @@ import cv2
 import numpy as np
 
 start_time = time.time()    #start time
-timeOut = 120    #timeout after 120 seconds
+timeOut = 300    #timeout after 300 seconds
 #--------GPIO---------
 GPIO.setmode(GPIO.BCM) # set mode for broadcom numbering
 GPIO.setup(27, GPIO.IN, pull_up_down=GPIO.PUD_UP)
@@ -85,7 +85,7 @@ for my_text, text_pos in my_buttons.items():    #cycle through dictionary to loa
 
 pygame.display.flip()   #display working screen surface
 #-------Upload Images for selection------
-image1_pygame = pygame.image.load("njcutuP.png")
+image1_pygame = pygame.image.load("ocean.jpg")
 image1_rect = image1_pygame.get_rect()
 image2_pygame = pygame.image.load("Cornell.jpg")
 image2_rect = image2_pygame.get_rect()
@@ -476,9 +476,9 @@ while code_run:
             elif pick_image_screen==True:
                 #display 4 images
                 if Xcoord<160 and Ycoord<120: #image 1
-                    resize = cv2.imread('njcutuP.png',1)
+                    resize = cv2.imread('ocean.jpg',1)
                     resize = cv2.resize(resize, (320,240))
-                    resize_pygame = pygame.image.load('njcutuP.png')
+                    resize_pygame = pygame.image.load('ocean.jpg')
                     resize_pygame =  pygame.transform.scale(resize_pygame,(320,240))
                     resize_rect = resize_pygame.get_rect()
                     hsv_img = cv2.cvtColor(resize, cv2.COLOR_BGR2HSV)

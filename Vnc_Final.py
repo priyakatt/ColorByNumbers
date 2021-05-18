@@ -65,7 +65,7 @@ pygame.mouse.set_visible(True) #turn cursor on (VNC)
 #pygame.mouse.set_visible(False) #turn cursor off (piTFT)
 WHITE = 255,255,255
 BLACK = 0,0,0
-scale=3
+scale=2
 screen = pygame.display.set_mode((320*scale,240*scale))
 
 Xcoord=0    #initialize x,y
@@ -86,7 +86,7 @@ for my_text, text_pos in my_buttons.items():    #cycle through dictionary to loa
 
 pygame.display.flip()   #display working screen surface
 #-------Upload Images for selection------
-image1_pygame = pygame.image.load("njcutuP.png")
+image1_pygame = pygame.image.load("ocean.jpg")
 image1_rect = image1_pygame.get_rect()
 image2_pygame = pygame.image.load("Cornell.jpg")
 image2_rect = image2_pygame.get_rect()
@@ -510,9 +510,9 @@ while code_run:
             elif pick_image_screen==True:
                 #display 4 images
                 if Xcoord<160*scale and Ycoord<120*scale: #image 1
-                    resize = cv2.imread('njcutuP.png',1)
+                    resize = cv2.imread('ocean.jpg',1)
                     resize = cv2.resize(resize, (320*scale,240*scale))
-                    resize_pygame = pygame.image.load('njcutuP.png')
+                    resize_pygame = pygame.image.load('ocean.jpg')
                     resize_pygame =  pygame.transform.scale(resize_pygame,(320*scale,240*scale))
                     resize_rect = resize_pygame.get_rect()
                     hsv_img = cv2.cvtColor(resize, cv2.COLOR_BGR2HSV)
