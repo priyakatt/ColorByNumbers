@@ -92,7 +92,7 @@ image2_pygame = pygame.image.load("Cornell.jpg")
 image2_rect = image2_pygame.get_rect()
 image3_pygame = pygame.image.load("puzzle.png")
 image3_rect = image3_pygame.get_rect()
-image4_pygame = pygame.image.load("6ukjvZN.png")
+image4_pygame = pygame.image.load("pinkflowers.png")
 image4_rect = image4_pygame.get_rect()
 
 #Shrink
@@ -534,9 +534,9 @@ while code_run:
                     hsv_img = cv2.cvtColor(resize, cv2.COLOR_BGR2HSV)
                     imageProcessing(hsv_img,resize)
                 else: #Image 4
-                    resize = cv2.imread('6ukjvZN.png',1)
+                    resize = cv2.imread('pinkflowers.png',1)
                     resize = cv2.resize(resize, (320*scale,240*scale))
-                    resize_pygame = pygame.image.load('6ukjvZN.png')
+                    resize_pygame = pygame.image.load('pinkflowers.png')
                     resize_pygame =  pygame.transform.scale(resize_pygame,(320*scale,240*scale))
                     resize_rect = resize_pygame.get_rect()
                     hsv_img = cv2.cvtColor(resize, cv2.COLOR_BGR2HSV)
@@ -895,8 +895,13 @@ while code_run:
                     cv2.drawContours(canvas, [contours_Grey[shape_num]], -1,  (fillB,fillG,fillR),thickness=-1)
                 if color_range <13:
                     draw_screen = True
-                    cv2.drawContours(canvas, contours_all[12], -1, (0,0,0), thickness = 1)
-                    cv2.drawContours(canvas, contours_all[13], -1, (0,0,0), thickness = -1)
+                    i=0
+                    cv2.drawContours(canvas, contours_all[13], -1, (0,0,0), thickness=-1)
+                    while i<13:
+                        cv2.drawContours(canvas, contours_all[i], -1, (0,0,0), thickness = 1)
+                        i = i+1
+                    #cv2.drawContours(canvas, contours_all[13], -1, (0,0,0), thickness = -1)
+
 
                     cv2.imwrite('canvas.png',canvas)
                     canvasPygame = pygame.image.load("canvas.png")

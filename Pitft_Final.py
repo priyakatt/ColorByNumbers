@@ -36,7 +36,7 @@ def GPIO27_callback(channel): #GPIO27 quit
     code_run=False  #set flag to 0 to tell main code to end
 
 def GPIO22_callback(channel): #GPIO22
-    global menu_screen
+    global menu_screen, start_screen, pick_image_screen
     if start_screen==True or pick_image_screen==True:
         menu_screen=False
     else:
@@ -91,7 +91,7 @@ image2_pygame = pygame.image.load("Cornell.jpg")
 image2_rect = image2_pygame.get_rect()
 image3_pygame = pygame.image.load("puzzle.png")
 image3_rect = image3_pygame.get_rect()
-image4_pygame = pygame.image.load("6ukjvZN.png")
+image4_pygame = pygame.image.load("pinkflowers.png")
 image4_rect = image4_pygame.get_rect()
 
 #Shrink
@@ -500,9 +500,9 @@ while code_run:
                     hsv_img = cv2.cvtColor(resize, cv2.COLOR_BGR2HSV)
                     imageProcessing(hsv_img,resize)
                 else: #Image 4
-                    resize = cv2.imread('6ukjvZN.png',1)
+                    resize = cv2.imread('pinkflowers.png',1)
                     resize = cv2.resize(resize, (320,240))
-                    resize_pygame = pygame.image.load('6ukjvZN.png')
+                    resize_pygame = pygame.image.load('pinkflowers.png')
                     resize_pygame =  pygame.transform.scale(resize_pygame,(320,240))
                     resize_rect = resize_pygame.get_rect()
                     hsv_img = cv2.cvtColor(resize, cv2.COLOR_BGR2HSV)
