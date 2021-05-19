@@ -10,7 +10,7 @@ import cv2
 import numpy as np
 
 start_time = time.time()    #start time
-timeOut = 420    #timeout after 120 seconds
+timeOut = 600    #timeout after 120 seconds
 #--------GPIO---------
 GPIO.setmode(GPIO.BCM) # set mode for broadcom numbering
 GPIO.setup(27, GPIO.IN, pull_up_down=GPIO.PUD_UP)
