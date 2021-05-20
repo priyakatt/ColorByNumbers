@@ -190,12 +190,30 @@
 
                     <p>We also wanted to provide more options to interact with the game, and to be able change the options selected in the startup screens during gameplay. We chose GPIO buttons instead of screen taps to facilitate this interaction in order to make sure the image could be displayed on the screen at the highest possible resolution. Three GPIO buttons and corresponding callback functions were added. </p>
                     <p><b>Quit Button: GPIO27</b></br>
-                    A press of the button at GPIO27 sets the global ‘code_run’ variable to False, which will end the main while loop. The program then calls GPIO.cleanup() to reset all GPIO ports used.</p>
+                    A press of the button at GPIO27 sets the global <code>code_run</code> variable to False, which will end the main while loop. The program then calls <code>GPIO.cleanup()</code> to reset all GPIO ports used.</p>
                     <p><b>Display original image: GPIO23</b></br>
-                    A press of the button at GPIO23 first toggles the draw_screen variable. If this variable is now False, the program will display the original picture (figure 14). This can be a helpful feature for users trying to recreate the colors of the original image. If the draw_screen variable is now True, the display will switch back to the contour display.</p>
+                    A press of the button at GPIO23 first toggles the <code>draw_screen</code> variable. If this variable is now False, the program will display the original picture (figure 14). This can be a helpful feature for users trying to recreate the colors of the original image. If the <code>draw_screen</code> variable is now True, the display will switch back to the contour display.</p>
 
                     <p> <b>Fig 14: </b>(a) Partially colored image (b) Display after button at GPIO23 is pressed</br>
                     <img src="assets/img/fig14.png" alt="fig14"></p></br>
+
+                    <p><b>Menu screen: GPIO22</b></br>
+                    If the user would like to change the coloring mode, the image they are coloring, or save their current image, they can press the button at GPIO22. Pressing this button will first make sure the game has already progressed past the startup screens by checking the values of <code>start_screen</code> and <code>pick_image_screen</code>. If both values are False, then <code>menu_screen</code> is set to True, and the <code>menu_buttons</code> dictionary containing the options ‘Change Mode’, ‘New Image’, and ‘Save Image’ are displayed (figure 15). At this point, since <code>menu_screen</code> is set to True, the next screen tap will correspond to which button the user presses. 
+                    If the user taps the top third of the screen (<code>Ycoord<=80</code>), the option Change Mode is selected, and <code>start_screen</code> and <code>new_mode</code> are both set to true. As it does in the startup screens, <code>start_screen</code> corresponds to the menu screen shown in figure 11. The user then selects which mode they would like. Now that <code>new_mode</code> is also set true, the program returns to the contour display (instead of immediately going to the image selection screen as it would do during startup). 
+                    If the user taps the middle third of the screen (<code>Ycoord>80 and Ycoord<160</code>), the option New Image is selected, and <code>pick_image_screen</code> is set to True. This then brings the program to display the grid of image options (figure 12), and the user can choose which image they want to color. This option can also be used to clear colored-in cells if the user would like to start over.
+                    If the user taps the bottom third of the screen (<code>YCoord >=160</code>), the function <code>pygame.image.save()</code> is called to save the current canvas to an image called <code>user_image.png</code>.
+                    After any of these selections are chosen, <code>menu_screen</code> is set False and the program returns to display the contours.
+
+                    <p> <b>Fig 15: </b>Menu screen after pressing the button at GPIO22</br>
+                    <img src="assets/img/fig15.png" alt="fig15"></p></br>
+
+                    A state diagram is shown in figure 16.
+
+                    <p> <b>Fig 16: </b>Menu screen after pressing the button at GPIO22</br>
+                    <img src="assets/img/fig16.png" alt="fig16"></p></br>
+
+
+
                     
 
 
