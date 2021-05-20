@@ -158,6 +158,35 @@
                     <p>One of the largest challenges that we faced in the image processing was separating the contours. This challenge came from a lack of documentation of the data types used in some of the python openCV functions. As mentioned previously, we were able to debug our program by looking at the C++ function calls and argument types instead of the python version in the documentation. Using this knowledge, we learned that in order to separate the contours to be drawn using <code>drawContours()</code>, you had to pass the single contour inside of an array. For example, if you want the first shape inside the contours list named <code>mycontours</code>, you must use pass in <code>[mycontours[0]]</code> as the contours argument in order for the data type to be an array of arrays. Throughout the image processing section, we debugged by displaying images using <code>cv2.imshow()</code>.</p>
 
                     <h3 class="mb-0">PyGame Interface and PiTFT Implementation</h3>
+                    <p>The image processing steps are based on openCV, and we tested and filled in different color cells using hard-coded pixel inputs. In order to implement direct user interaction with our Color By Numbers game, we introduce PyGame and PiTFT elements.</p>
+
+					<p>The program is organized by a set of state variables that toggle on and off depending on which screen needs to be shown. At startup, PyGame is initialized using <code>pygame.init()</code>, and the <code>my_buttons</code> dictionary containing the mode options ‘Color By Numbers’ and ‘Free Play’ are displayed (figure 11). The state variable <code>start_screen</code> is initialized to True, so the first screen tap will be used to determine which mode is chosen. If the user taps the top of the screen (<code>Ycoord<120</code>), they enter the Color By Numbers mode, and the flag variable <code>normal_play</code> is set True and <code>free_play</code> is set False. If the user taps the bottom of the screen (<code>Ycoord>=120</code>), the opposite occurs and <code>free_play</code> is set True while <code>normal_play</code> is set False. This choice determines the coloring mode that the game will begin in. However, this mode can be changed during gameplay using GPIO buttons (which will be elaborated upon later).</p>
+
+					<p> <b>Fig 11: </b>Initial menu screen to choose game mode.</br> 
+                    <img src="assets/img/fig11.png" alt="fig11"></p></br>
+
+                    <p>At this point, <code>start_screen</code> is toggled to False, and since <code>new_mode</code> is initialized to False (<code>new_mode</code> is a flag variable used when a GPIO button is pressed), <code>pick_image_screen</code> is set True, and the 4 image options are displayed in a 2x2 grid (figure 12). Whichever quadrant the next screen tap occurs in correlates to the respective picture; the user taps the image they would like to color. Once this screentap occurs, the chosen image is reloaded into PyGame in the full screen size, and the function <code>imageProcessing()</code> is called to make the color masks and contours that were elaborated on earlier.</p>
+
+                    <p> <b>Fig 12: </b>Image selection screen.</br> 
+                    <img src="assets/img/fig12.png" alt="fig12"></p></br>
+
+                    <p>Now that the image is chosen, ‘pick_image_screen’ is toggled to False, and the next screen displayed is the canvas with drawn contours. Since ‘canvas_screen’ was initialized to True, the next screen tap corresponds to which cell the user wants to color in. The program checks the coordinate of the screen tap and compares it to the associated color masks to find the shape that pixel belongs to, and then displays color range choices based on the game mode.</p>
+
+					<p>The color selection screens are determined by the mode chosen. If the Color By Numbers mode was selected (thus, the ‘normal_play’ flag is set True), the color gradient corresponding to the range of the original color of that cell is displayed, and the user can tap which version of that color they want. Color gradient images were made using the 13 defined color ranges. For example, if in the original image a cell appeared yellow, the yellow gradient would be displayed, and the user would tap on which shade of yellow they would like to color the cell. If the Free Play mode was selected (thus, the ‘free_play’ flag is set True), the ‘found_shape’ variable is set True. If both ‘found_shape’ and ‘free_play’ are set true, the state variable ‘hue_screen’ is set True, and a color gradient displaying all possible hues is displayed. From this screen, the user can tap on which range they would like to see more options of. In order to save the hsv value of this pixel tap, we use:</br>
+						<code>
+							hue = all_colors[Ycoord,Xcoord] </br>
+							hue_int =np.uint8([[[int(hue[0]),int(hue[1]),int(hue[2])]]]) </br>
+							hsv_hue = cv2.cvtColor(hue_int,cv2.COLOR_BGR2HSV) </br>
+						</code>
+					</p>
+					<p>These new color variables are needed so that the shape mask can be found based on the original color of the shape, but it can be colored in whatever color the user specifies.
+					After this tap, a gradient of that range will be displayed, based on the color of the pixel tapped on. From this screen, the user chooses what color they would like to color the cell. 
+					Once a color has been selected and the color cell is filled in, ‘canvas_screen’ is toggled to True, and found_shape is toggled to False. Then, the pattern is ready to be repeated as the contours are displayed and the program is waiting for a screen tap of the next shape to color in. Example color gradient screens are shown in figure 13.</p>
+
+					<p> <b>Fig 13: </b>(a)Color gradient of all possible hues. (b) (c)example gradients (yellow and green)</br> 
+                    <img src="assets/img/fig13.png" alt="fig13"></p></br>
+
+                    
 
 
                 </div>
