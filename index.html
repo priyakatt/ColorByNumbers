@@ -183,9 +183,19 @@
 					After this tap, a gradient of that range will be displayed, based on the color of the pixel tapped on. From this screen, the user chooses what color they would like to color the cell. 
 					Once a color has been selected and the color cell is filled in, ‘canvas_screen’ is toggled to True, and found_shape is toggled to False. Then, the pattern is ready to be repeated as the contours are displayed and the program is waiting for a screen tap of the next shape to color in. Example color gradient screens are shown in figure 13.</p>
 
-					<p> <b>Fig 13: </b>(a)Color gradient of all possible hues. (b) (c)example gradients (yellow and green)</br> 
+					<p> <b>Fig 13: </b>(a)Color gradient of all possible hues. (b) (c)example gradients (yellow and green)</br>
                     <img src="assets/img/fig13.png" alt="fig13"></p></br>
 
+                    <h3 class="mb-0">Changing Modes with GPIO Buttons</h3>
+
+                    <p>We also wanted to provide more options to interact with the game, and to be able change the options selected in the startup screens during gameplay. We chose GPIO buttons instead of screen taps to facilitate this interaction in order to make sure the image could be displayed on the screen at the highest possible resolution. Three GPIO buttons and corresponding callback functions were added. </p>
+                    <p><b>Quit Button: GPIO27</b></br>
+                    A press of the button at GPIO27 sets the global ‘code_run’ variable to False, which will end the main while loop. The program then calls GPIO.cleanup() to reset all GPIO ports used.</p>
+                    <p><b>Display original image: GPIO23</b></br>
+                    A press of the button at GPIO23 first toggles the draw_screen variable. If this variable is now False, the program will display the original picture (figure 14). This can be a helpful feature for users trying to recreate the colors of the original image. If the draw_screen variable is now True, the display will switch back to the contour display.</p>
+
+                    <p> <b>Fig 13: </b>(a) Partially colored image (b) Display after button at GPIO23 is pressed</br>
+                    <img src="assets/img/fig13.png" alt="fig13"></p></br>
                     
 
 
