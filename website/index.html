@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>ColorByNumbers</title>
+        <link rel="icon" type="image/x-icon" href="assets/img/favicon.ico" />
+        <!-- Font Awesome icons (free version)-->
+        <script src="https://use.fontawesome.com/releases/v5.15.3/js/all.js" crossorigin="anonymous"></script>
+        <!-- Google fonts-->
+        <link href="https://fonts.googleapis.com/css?family=Saira+Extra+Condensed:500,700" rel="stylesheet" type="text/css" />
+        <link href="https://fonts.googleapis.com/css?family=Muli:400,400i,800,800i" rel="stylesheet" type="text/css" />
+        <!-- Core theme CSS (includes Bootstrap)-->
+        <link href="css/styles.css" rel="stylesheet" />
+    </head>
+    <body id="page-top">
+        <!-- Navigation-->
+        <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top" id="sideNav">
+            <a class="navbar-brand js-scroll-trigger" href="#page-top">
+                <span class="d-block d-lg-none">ECE 5725</span>
+                
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav">
+                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#colorbynumbers">Color By Numbers</a></li>
+                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#objective">Objective</a></li>
+                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#video">Video</a></li>
+                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#introduction">Introduction</a></li>
+                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#design">Design and Testing</a></li>
+                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#results">Results</a></li>
+                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#conclusions">Conclusions</a></li>
+                </ul>
+            </div>
+        </nav>
+        <!-- Page Content-->
+        <div class="container-fluid p-0">
+            <!-- colorbynumbers-->
+            <section class="resume-section" id="colorbynumbers">
+                <div class="resume-section-content">
+                    <h1 class="mb-0">
+                        Color by 
+                        <span class="text-primary">Numbers</span>
+                    </h1>
+                    <div class="subheading mb-5">
+                        Priya Kattappurath (psk92) and Maia Mahanti (mm2563)
+                        
+                    </div>
+                    <p class="lead mb-5">ECE 5725 Spring 2021 Final Project</p>
+                </div>
+            </section>
+            <hr class="m-0" />
+            <!-- objective-->
+            <section class="resume-section" id="objective">
+                <div class="resume-section-content">
+                    <h2 class="mb-5">Objective</h2>
+                    <div class="d-flex flex-column flex-md-row justify-content-between mb-5">
+                        <div class="flex-grow-1">
+                            <p>This project uses images that are uploaded to the Raspberry Pi to create shape outlines that a user can “color in” though touch screen presses on the PiTFT or VNC. The user can select an image, switch between coloring modes, and save their final creation. There is a traditional color by number mode, where the colors are predefined by the original image. And there is a free color mode, where the user can fill shapes with any color. This project uses OpenCV and Pygame for image processing, image display, and user interaction. </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <hr class="m-0" />
+             <!-- video-->
+            <section class="resume-section" id="video">
+                <div class="resume-section-content">
+                    <h2 class="mb-5">Video</h2>
+                    <div class="d-flex flex-column flex-md-row justify-content-between mb-5">
+                        <div class="flex-grow-1">
+          					<iframe width="640" height="360" src="https://www.youtube.com/watch?v=GuM8vTq0jd4" frameborder="0" allowfullscreen></iframe>
+         					<h4 style="text-align:center;">Demonstration Video</h4>
+      					</div>
+                	</div>
+                </div>
+            </section>
+            <hr class="m-0" />
+            <!-- introduction-->
+            <section class="resume-section" id="introduction">
+                <div class="resume-section-content">
+                	<h2 class="mb-5">Introduction</h2>
+                	<div class="d-flex flex-column flex-md-row justify-content-between mb-5">
+                        <div class="flex-grow-1">
+                			<p> This project implemented a color by number game on the Raspberry Pi using a PiTFT screen. Using the touchscreen, users were able to select an image, which was then processed using openCV. Once the image processing was complete, an outline of the image would be displayed on a blank screen. When a user pressed a pixel on the PiTFT, pygame was used to determine which shape the user was pressing and display a selection of colors for the user to choose from. Different modes allowed the user to choose whether to color the picture using the original image colors as guidance (color by number) or to color the picture using any color they wanted (free color). The user could also switch between four images and save their work of art to the Raspberry Pi upon completion.  </p>
+                		</div>
+                	</div>
+                </div>
+            </section>
+            <hr class="m-0" />
+            <!-- design-->
+            <section class="resume-section" id="design">
+                <div class="resume-section-content">
+                    <h2 class="mb-5">Design and Testing</h2>
+                    <h3 class="mb-0">Image Processing with OpenCV</h3>
+                    <p> The first step of our project was to download a precompiled openCV library. We followed the OpenCV install guide from Professor Skovira. We were able to install openCV version 3.2.0 using the following commands: </br>
+                    	<code>
+                    		sudo apt-get install libopencv-dev python-opencv </br>
+							sudo apt-get install python-opencv </br>
+							sudo apt-get install python-scipy </br>
+							sudo apt-get install ipython </br>
+						</code>
+ 					</p>
+ 					<h4 class="mb-0">Color Masks</h4>
+ 					<p> Once we had sample images uploaded on the Raspberry Pi, we then wanted to differentiate the shapes inside the image for the user to color. OpenCV has a built-in function that is able to find the outline of shapes, called contours, in a binary image. Because the uploaded images are colored and not binary, the first task was to separate the image by color and create a series of binary images so that the contours could be found. This meant creating different masks of the image corresponding to different color ranges. Because openCV reads images in the Blue Green Red (BGR) color space by default, the first thing we had to do was change the color space of the image to the Hue Saturation Value (HSV) color space in order to create masks of a specific color range. The function used to create a mask around a specific color range, <code>cv2.inRange()</code>, required an HSV image, the low HSV values, and the high HSV values. </p>
+
+					<p>The next step of finding the masks for each color range was to define the color ranges that the masks were to be created from. For our initial test, we started with a simple image that we created using photopea with only three colors (see figure 1). We used a basic color converter to find example HSV ranges around the pure red, blue, and green colors used. An example of the gradient range chosen for red is given in figure 2. While most HSV values are listed as a degree (H) or a percentage (S and V), it is important to note that openCV required the hue (H) to be in the range of 0 and 180, and the saturation and value (S and V) parameters to be in the range of 0 and 255. Then a mask for each color was created (see figure 3). We were able to test our implementation of mask separation and image processing using <code>cv2.imshow()</code> followed by <code>cv2.waitKey(0)</code>.
+					</p>
+                    
+                    <p> <b>Fig 1: </b> Simple Sample Image</br> 
+                    <img src="assets/img/3Ust9Lq.png" alt="fig1"></p></br>
+                    <p> <b>Fig 2: </b> HSV Low Value, Color range and High value for making a red mask
+                    <img src="assets/img/hsvrange.png" alt="fig2"></p></br>
+                    <p> <b>Fig 3: </b>Mask for Color Red </br> 
+                    <img src="assets/img/redmaskpng.png" alt="fig3"></p></br>
+
+                    <h4 class="mb-0">Contours</h4>
+                    <p>Once the color masks were created, the contours of each mask are then ready to be found. The inputs that we used for the <code>cv2.findContours()</code> function was a single mask image of a color range, the contour retrieval mode, and the contour approximation method. We used the mode <code>cv2.RETR_TREE</code>, which allows the function to return all of the contours in the mask image. And we used the approximation method <code>cv2.CHAIN_APPROX_NONE</code> because we wanted to ensure that all the found points of the contour were kept, and no approximations of the shape were made, as the image shapes could be more complex than simple polygons. An example of the <code>findContours</code> call is shown below.</p>
+                    <p><code>_,contours,hierarchy = cv2.findContours(mask_Red, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)</code></p>
+
+					<p>This function then returns a hierarchy array (which was unused in this project) and a contours  array of arrays. To clarify, the contours output is an array of contours, where each contour is an array of points, and hence an array of arrays. One key resource in understanding the openCV functions and arguments was to look at the C++ function calls instead of the python function calls in the openCV documentation. The python documentation did not include the data structures of the arguments, whereas the C++ documentation did, which helped us fix errors when implementing shape differentiation.</p>
+					<p> After retrieving the contours of a mask, we were able to test the ability of openCV’s shape outlines by drawing the contours onto the images (see figure 4). To draw the contours, we used the openCV function, <code>cv2.drawContours()</code>, where the function inputs included the image to be drawn on, the contours to be drawn, the color of the outline, and the thickness of the line. </p> 
+
+					<p> <b>Fig 4: </b>Mask for Color Red</br> 
+                    <img src="assets/img/foundcontours.png" alt="fig4"></p></br>
+                    
+					<h4 class="mb-0">Expanded Color Ranges</h4>
+					<p>After being able to successfully create masks and find the contours of an image with a limited amount of colors, we then expanded the amount of HSV color ranges to include more hues in the spectrum with a larger range of S and V values. For guidance, we used a RapidTables color chart to create the HSV ranges (figure 5). Upon testing these ranges with different images, we expanded the HSV ranges to include lower S and V values, meaning that darker colors would be detected. Additionally, we expanded the hue values so that all colors would be represented in the thirteen ranges (see table 1). </p>
+
+					<p> <b>Fig 5: </b>Example of the preliminary color ranges for mask making</br> 
+                    <img src="assets/img/prelimranges.png" alt="fig5"></p></br>
+
+                    <p> <b>Table 1: </b>Example of the preliminary color ranges for mask making</br> 
+                    <img src="assets/img/rangetable.png" alt="table1"></p></br>
+
+                    <h4 class="mb-0">Shape Selection, Differentiation, and Coloring</h4>
+					<p>After the shapes were created and the outlines could be drawn on a blank for the user to see (fig 6), the next step was to allow the user to select and fill a shape with a color of their choice. We developed this part of the image processing before PiTFT implementation and therefore hard-coded the pixel that the user chose. In order to find which shape the chosen pixel was in, the image processing algorithm first checked the color value of that pixel in each of the binary mask images that corresponded to the 13 different color ranges (fig 7). In a mask, the shapes are represented by filled in white areas. A value of 255 corresponds to white and 0 corresponds to black. Once a value of 255 has been found in a color range mask, all of the contours found in the color range mask are drawn and filled in separately on blank images using <code>cv2.drawContours()</code> with the thickness set to -1. Since this drawing occurs on a BGR image, a mask of each of the filled in shapes had to be made to search a binary image (fig 8). After each of the shapes were separated and masks were made, the chosen shape can be found by checking the value of the pixel in each of the shape mask images. Once a value of 255 was found, the corresponding shape was found as well (fig 8). </p>
+
+					<p> <b>Fig 6: </b>Contours Drawn on Blank Canvas</br> 
+                    <img src="assets/img/drawncontours.png" alt="fig6"></p></br>
+
+                    <p> <b>Fig 7: </b>Depiction of checking the value of the pixel outlined in red in 3 of the 13 color range masks</br> 
+                    <img src="assets/img/pixelcheck.png" alt="fig7"></p></br>
+
+                    <p> <b>Fig 8: </b>a) The first shape from the red mask contours list filled in. b) binary mask image of (a)</br> 
+                    <img src="assets/img/fig8.png" alt="fig8"></p></br>
+
+                    <p> <b>Fig 9: </b>Red Color Range Shape Masks with a depiction of checking the pixel value to determine the chosen shape</br> 
+                    <img src="assets/img/fig9.png" alt="fig9"></p></br>
+
+                    <p> After the chosen shape was determined, the shape could then be colored on the blank image with the shape outlines using <code>cv2.drawContours()</code> with a chosen color and the thickness set to -1 to fill in the shape (fig 10).</p>
+
+                    <p> <b>Fig 10: </b>The chosen shape colored in a hard-coded yellow</br> 
+                    <img src="assets/img/fig10.png" alt="fig10"></p></br>
+
+                    <h4 class="mb-0">Challenges</h4>
+                    <p>One of the largest challenges that we faced in the image processing was separating the contours. This challenge came from a lack of documentation of the data types used in some of the python openCV functions. As mentioned previously, we were able to debug our program by looking at the C++ function calls and argument types instead of the python version in the documentation. Using this knowledge, we learned that in order to separate the contours to be drawn using <code>drawContours()</code>, you had to pass the single contour inside of an array. For example, if you want the first shape inside the contours list named <code>mycontours</code>, you must use pass in <code>[mycontours[0]]</code> as the contours argument in order for the data type to be an array of arrays. Throughout the image processing section, we debugged by displaying images using <code>cv2.imshow()</code>.</p>
+
+                    <h3 class="mb-0">PyGame Interface and PiTFT Implementation</h3>
+
+
+                </div>
+            </section>
+            <hr class="m-0" />
+            <!-- results-->
+            <section class="resume-section" id="results">
+                <div class="resume-section-content">
+                    <h2 class="mb-5">Results</h2>
+                    <p>results</p>
+                </div>
+            </section>
+            <hr class="m-0" />
+            <!-- conclusions-->
+            <section class="resume-section" id="conclusions">
+                <div class="resume-section-content">
+                    <h2 class="mb-5">Conclusion</h2>
+                    <p> conclusion </p>
+                    <h3 class="mb-0">Future Work</h3>
+                    <p> conclusion </p>
+                    <h3 class="mb-0">Budget</h3>
+                    <p> conclusion </p>
+                    <h3 class="mb-0">Referenecs</h3>
+                    <p> conclusion </p>
+                </div>
+            </section>
+        </div>
+        <!-- Bootstrap core JS-->
+        <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- Third party plugin JS-->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+        <!-- Core theme JS-->
+        <script src="js/scripts.js"></script>
+    </body>
+</html>
