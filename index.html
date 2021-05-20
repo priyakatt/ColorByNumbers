@@ -186,7 +186,7 @@
 					<p> <b>Fig 13: </b>(a)Color gradient of all possible hues. (b) (c)example gradients (yellow and green)</br>
                     <img src="assets/img/fig13.png" alt="fig13"></p></br>
 
-                    <h3 class="mb-0">Changing Modes with GPIO Buttons</h3>
+                    <h4 class="mb-0">Changing Modes with GPIO Buttons</h4>
 
                     <p>We also wanted to provide more options to interact with the game, and to be able change the options selected in the startup screens during gameplay. We chose GPIO buttons instead of screen taps to facilitate this interaction in order to make sure the image could be displayed on the screen at the highest possible resolution. Three GPIO buttons and corresponding callback functions were added. </p>
                     <p><b>Quit Button: GPIO27</b></br>
@@ -207,16 +207,13 @@
                     <p> <b>Fig 15: </b>Menu screen after pressing the button at GPIO22</br>
                     <img src="assets/img/fig15.png" alt="fig15"></p></br>
 
-                    A state diagram is shown in figure 16.
+                    <p>A state diagram is shown in figure 16.</p>
 
                     <p> <b>Fig 16: </b>Menu screen after pressing the button at GPIO22</br>
                     <img src="assets/img/fig16.png" alt="fig16"></p></br>
 
-
-
-                    
-
-
+                    <h3 class="mb-0">VNC vs PiTFT</h3>
+                    <p>Once we were able to perform color by numbers and free color using pygame, we created two different files. One file was meant to be run on the PiTFT and the other was meant to be run on VNC. The only difference between these two files was that for the VNC file, the display screen was set to be 640 by 480, or twice the size of that of the PiTFT for better resolution of the images. The only change made was that every pygame and cv2 image was resized to be twice the original size. To resize the pygame images, we used <code>image_pygame = pygame.transform.scale(image_pygame,(320*scale,120*scale))</code>. Where <code>scale</code> was an integer set to 2 so that all images would double in size for display. Additionally the openCV images were enlarged by using <code>image = cv2.resize(image,(320*scale,240*scale))</code>. </p>
                 </div>
             </section>
             <hr class="m-0" />
@@ -224,7 +221,34 @@
             <section class="resume-section" id="results">
                 <div class="resume-section-content">
                     <h2 class="mb-5">Results</h2>
-                    <p>results</p>
+                    <p>In this project, everything performed as planned. We even exceeded our project expectations by implementing the free color mode and allowing the user to switch modes, switch images, start over, and save their image. Overall, we were able to successfully load images, create shape outlines of images, color different shapes inside the images, and save color by number creations. We were also able to implement the design on the PiTFT using pygame so that the user could interactively choose the modes, shapes, and colors through touchscreen and GPIO button presses. Additionally, we were  successful in implementing two different coloring modes. The color by numbers mode followed traditional color by numbers and guided the user on what colors to use in certain shapes (see figure 18). And the free color mode allowed the user to color anything the color of their choice (see figure 19). Lastly, the coloring game could be played on the PiTFT or on VNC for a higher resolution image. </p>
+
+                    <p>For optimal user experience, we created our own images for the users to color. This is because we wanted to ensure that all shapes were detected and easy to select. In our trials, shapes that were too dark or light in color could not be found in our image processing. And shapes that were too small were difficult to color. So, we created images that had detectable colors with shapes that were large enough for the user to easily select and color. </p>
+
+                    <p> <b>Fig 17: </b>Original Image</br>
+                    <img src="assets/img/fig17.png" alt="fig17"></p></br>
+
+                    <p> <b>Fig 18: </b>Example color by numbers creation based on figure 17</br>
+                    <img src="assets/img/fig19.png" alt="fig19"></p></br>
+
+                    <p> <b>Fig 19: </b>Example free color creation based on figure 17</br>
+                    <img src="assets/img/fig19.png" alt="fig19"></p></br>
+
+                    <p> However, there are some limitations to our implementation. One limitation of our image processing design includes the fact that the shapes are determined by having groups of pixels within one of the thirteen color ranges. This means that if an image has shapes that are differentiated by only a small variation in the hue, the program will not view them as different shapes, and will display them as one. This is also what makes it difficult to perform this color by numbers implementation on a photograph, as photographs tend to lack distinct shapes and large hue variations in details. </p>
+
+                    <p>Additionally, another limitation comes from the method that we used to define a shape and fill it. Filling in a shape results in the entirety of the enclosed contour area to be colored (see figure 20). For example, this means that if you have shape A inside shape B, coloring shape B purple will also color in shape A purple. </p>
+
+                    <p> <b>Fig 20: </b>a) original image b) outline of contours c) Coloring of the clock tower results in coloring the clock as well</br>
+                    <img src="assets/img/fig20.png" alt="fig20"></p></br>
+
+                    <p> Another thing we noticed was that the edge of shapes or outlines can be considered a different color and therefore shape than the shape itself. We believe that this is a result of high resolution images having pixels of different colors next to each other, resulting in what looks like a shape with a coloration that is a blend of the pixels colors (see figure 21). Because these shapes are on the scale of a few pixels, they are nearly impossible to color.</p>
+
+                    <p> <b>Fig 21: </b>a) original image of a drawn flower composed of distinct shapes and colors b) outline of all contours c) outline with shapes colored in. Notice that while the flower head is made of circles with distinct hues, the program did not perceive them as distinct circles</br>
+                    <img src="assets/img/fig21.png" alt="fig21"></p></br>
+
+
+
+
                 </div>
             </section>
             <hr class="m-0" />
@@ -236,7 +260,8 @@
                     <h3 class="mb-0">Future Work</h3>
                     <p> conclusion </p>
                     <h3 class="mb-0">Budget</h3>
-                    <p> conclusion </p>
+                    <p> <b>Table 2: </b>Budget</br> 
+                    <img src="assets/img/budget.png" alt="table2"></p></br>
                     <h3 class="mb-0">Referenecs</h3>
                     <p> conclusion </p>
                 </div>
