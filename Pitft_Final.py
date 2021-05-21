@@ -1,5 +1,7 @@
-# Pitft_Final.py Final Project PiTFT implementation
+# Pitft_Final.py 
+# Color by numbers Final Project- PiTFT implementation
 # mm2563, psk92
+#5/20/21
 
 import pygame
 from pygame.locals import* #for event MOUSE variables
@@ -10,14 +12,14 @@ import cv2
 import numpy as np
 
 start_time = time.time()    #start time
-timeOut = 600    #timeout after 300 seconds
+timeOut = 600    #timeout after 600 seconds
 #--------GPIO---------
 GPIO.setmode(GPIO.BCM) # set mode for broadcom numbering
 GPIO.setup(27, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 GPIO.setup(23, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 GPIO.setup(22, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
-def GPIO23_callback(channel): #GPIO23
+def GPIO23_callback(channel): #GPIO23 Display Original Image
     global draw_screen
     draw_screen = not draw_screen
     if draw_screen==False:
@@ -35,7 +37,7 @@ def GPIO27_callback(channel): #GPIO27 quit
     global code_run
     code_run=False  #set flag to 0 to tell main code to end
 
-def GPIO22_callback(channel): #GPIO22
+def GPIO22_callback(channel): #GPIO22 Display Menu Screen
     global menu_screen, start_screen, pick_image_screen
     if start_screen==True or pick_image_screen==True:
         menu_screen=False
@@ -73,7 +75,7 @@ screen.fill(BLACK) #Erase workspace
 #----------Button-------
 pygame.init()
 my_font=pygame.font.Font(None,30)
-my_buttons = {'Color By Numbers':(160, 80), 'Free Color':(160,160)}    #buttons
+my_buttons = {'Color By Numbers':(160, 80), 'Free Color':(160,160)}    #mode buttons
 menu_buttons = {'Change Mode':(160, 60), 'New Image':(160,120),'Save Image':(160,180)}    #Menu buttons
 
 screen.fill(BLACK) #Erase workspace
@@ -94,7 +96,7 @@ image3_rect = image3_pygame.get_rect()
 image4_pygame = pygame.image.load("flowers.png")
 image4_rect = image4_pygame.get_rect()
 
-#Shrink
+#Resize Images for PiTFT
 image1_shrink_py = pygame.transform.scale(image1_pygame,(160,120))
 image1_rect = image1_rect.move(0,0)
 image2_shrink_py = pygame.transform.scale(image2_pygame,(160,120))
@@ -104,50 +106,51 @@ image3_rect = image3_rect.move(160,0)
 image4_shrink_py = pygame.transform.scale(image4_pygame,(160,120))
 image4_rect = image4_rect.move(160,120)
 #--------Image Processing--------
-#monitor
+#Blank Canvas
 canvas =cv2.imread('aXnc7xn.png',1)#load blank canvas
 shape_canvas = cv2.imread('aXnc7xn.png',1)
+#Hue Gradient
 all_colors = cv2.imread('allcolors.png',1)
 all_colors_pygame = pygame.image.load('allcolors.png')
 all_colors_rect = all_colors_pygame.get_rect()
 #----Load Color Range Images-------
-reds = cv2.imread('red_range.png',1)
+reds = cv2.imread('red_range.png',1)    #Red Gradient Image
 reds_pygame = pygame.image.load("red_range.png")
 reds_rect = reds_pygame.get_rect()
-oranges = cv2.imread('orange_range.png',1)
+oranges = cv2.imread('orange_range.png',1)  #Orange Gradient Image
 oranges_pygame = pygame.image.load("orange_range.png")
 oranges_rect = oranges_pygame.get_rect()
-yellows= cv2.imread('yellow_range.png',1)
+yellows= cv2.imread('yellow_range.png',1)   #Yellow Gradient Image
 yellows_pygame = pygame.image.load("yellow_range.png")
 yellows_rect = yellows_pygame.get_rect()
-g1= cv2.imread('g1_range.png',1)
+g1= cv2.imread('g1_range.png',1)     #G1 gradient Image
 g1_pygame = pygame.image.load("g1_range.png")
 g1_rect = g1_pygame.get_rect()
-g2= cv2.imread('g2_range.png',1)
+g2= cv2.imread('g2_range.png',1)    #G2 gradient image
 g2_pygame = pygame.image.load("g2_range.png")
 g2_rect = g2_pygame.get_rect()
-g3 = cv2.imread('g3_range.png',1)
+g3 = cv2.imread('g3_range.png',1)    #G3 Gradient Image
 g3_pygame = pygame.image.load("g3_range.png")
 g3_rect = g3_pygame.get_rect()
-b1 = cv2.imread('b1_range.png',1)
+b1 = cv2.imread('b1_range.png',1)   #B1 gradient image
 b1_pygame = pygame.image.load("b1_range.png")
 b1_rect = b1_pygame.get_rect()
-b2= cv2.imread('b2_range.png',1)
+b2= cv2.imread('b2_range.png',1)    #B2 gradient Image
 b2_pygame = pygame.image.load("b2_range.png")
 b2_rect = b2_pygame.get_rect()
-b3 = cv2.imread('b3_range.png',1)
+b3 = cv2.imread('b3_range.png',1)   #B3 gradient Image
 b3_pygame = pygame.image.load("b3_range.png")
 b3_rect = b3_pygame.get_rect()
-purple= cv2.imread('purple_range.png',1)
+purple= cv2.imread('purple_range.png',1)    #Purple Gradient Image
 purple_pygame = pygame.image.load("purple_range.png")
 purple_rect = purple_pygame.get_rect()
-purplepink = cv2.imread('purplepink_range.png',1)
+purplepink = cv2.imread('purplepink_range.png',1)   #Purple/Pink gradient Image
 purplepink_pygame = pygame.image.load("purplepink_range.png")
 purplepink_rect = purplepink_pygame.get_rect()
-pinkred = cv2.imread('pinkred_range.png',1)
+pinkred = cv2.imread('pinkred_range.png',1)     #Pink/Red gradient Image
 pinkred_pygame = pygame.image.load("pinkred_range.png")
 pinkred_rect = pinkred_pygame.get_rect()
-grey= cv2.imread('grey_range.png',1)
+grey= cv2.imread('grey_range.png',1)    #Grey gradient image
 grey_pygame = pygame.image.load("grey_range.png")
 grey_rect = grey_pygame.get_rect()
 #--------Set Color Ranges-------
@@ -157,25 +160,25 @@ dark_red = np.array([9,255,255])
 #orange
 light_orange = np.array([10,102,153])
 dark_orange = np.array([20,255,255])
-#Y
+#Yellow
 light_Y=np.array([21, 102.0, 153.0])
 dark_Y=np.array([30.0, 255.0, 255.0])
-#G1
+#Green1
 light_G1 = np.array([31,102,153])
 dark_G1 = np.array([47,255,255])
-#G2
+#Green2
 light_G2 = np.array([48,102,153])
 dark_G2 = np.array([64,255,255])
-#G3
+#Green3
 light_G3 = np.array([65,102,153])
 dark_G3 = np.array([80,255,255])
-#B1
+#Blue1
 light_B1 = np.array([81,102,153])
 dark_B1 = np.array([94,255,255])
-#B2
+#Blue2
 light_B2 =np.array([95,102,153])
 dark_B2 = np.array([108,255,255])
-#B3
+#Blue3
 light_B3 = np.array([109,102,153])
 dark_B3 =np.array([122,255,255])
 #Purple
@@ -194,7 +197,7 @@ dark_Grey = np.array([0,0.0,229])
 light_dark = np.array([0,45,20])
 dark_dark = np.array([179,101,153])
 
-def imageProcessing(hsv_img,resize):
+def imageProcessing(hsv_img,resize):     #find Contours list and shapes list for all color ranges for image hsv_img
     global canvasPygame, canvas_rect
     global contours_Red, contours_Orange, contours_Yellow, contours_G1, contours_G2, contours_G3, contours_B1, contours_B2, contours_B3, contours_Purple, contours_PurpPink, contours_PinkRed, contours_Grey,contours_dark, contours_all
     global red_shapes_tot, red_shapes_list, orange_shapes_tot, orange_shapes_list, yellow_shapes_tot, yellow_shapes_list, G1_shapes_tot, G1_shapes_list, G2_shapes_tot, G2_shapes_list, G3_shapes_tot, G3_shapes_list, B1_shapes_tot, B1_shapes_list, B2_shapes_tot, B2_shapes_list, B3_shapes_tot , B3_shapes_list, Purple_shapes_tot, Purple_shapes_list, PurpPink_shapes_tot, PurpPink_shapes_list, PinkRed_shapes_tot , PinkRed_shapes_list, Grey_shapes_tot, Grey_shapes_list, dark_shapes_tot, dark_shapes_list
@@ -252,7 +255,7 @@ def imageProcessing(hsv_img,resize):
 
     contours_all = [contours_Red, contours_Orange, contours_Yellow, contours_G1, contours_G2, contours_G3, contours_B1, contours_B2, contours_B3, contours_Purple, contours_PurpPink, contours_PinkRed, contours_Grey,contours_dark]
     c=0
-    while c <13:
+    while c <13: #draw all contours on a blank screen to develop the blank image with shape outlines
         cv2.drawContours(canvas, contours_all[c], -1, (0,0,0),1)
         c = c+1
 
@@ -411,7 +414,7 @@ new_mode=False
 while code_run:
     current_time = time.time()
     elapsed_time = current_time - start_time     #calculate time elapsed
-    if elapsed_time > timeOut:   #quit if 30 seconds have elapsed
+    if elapsed_time > timeOut:   #quit if timeOut seconds have elapsed
         print("time out")
         code_run=False
     for event in pygame.event.get():    #watch for mousebutton press
@@ -421,7 +424,7 @@ while code_run:
             x,y=pos     #save x,y coordinates of touch
             Xcoord=x
             Ycoord=y
-            if start_screen==True:
+            if start_screen==True:   #Touch on Set Mode screen
                 if Ycoord<120:
                     normal_play=True
                     free_play=False
@@ -429,7 +432,7 @@ while code_run:
                     normal_play=False
                     free_play=True
                 start_screen= not start_screen
-                if new_mode ==False:
+                if new_mode ==False:     #Display Image Select Screen
                     pick_image_screen=True
                     screen.fill(BLACK)
                     screen.blit(image1_shrink_py, image1_rect)
@@ -441,8 +444,8 @@ while code_run:
                     screen.fill(BLACK)
                     screen.blit(canvasPygame ,canvas_rect)
                     pygame.display.flip()
-            elif menu_screen==True:     #New Mode
-                if Ycoord<=80:
+            elif menu_screen==True:     #touch on menu screen
+                if Ycoord<=80:      #New Mode
                     print('New Mode')
                     start_screen=True
                     screen.fill(BLACK) #Erase workspace
@@ -456,7 +459,7 @@ while code_run:
                     pygame.display.flip()   #display working screen surface
 
                 elif Ycoord>80 and Ycoord <160:     #New Image
-                    pick_image_screen=True
+                    pick_image_screen=True  
                     print('New Image')
                     canvas =cv2.imread('aXnc7xn.png',1)#load blank canvas
                     canvasPygame = pygame.image.load("canvas.png")
@@ -473,9 +476,9 @@ while code_run:
 
                 menu_screen=False
 
-            elif pick_image_screen==True:
+            elif pick_image_screen==True:   #touch on image select screen
                 #display 4 images
-                if Xcoord<160 and Ycoord<120: #image 1
+                if Xcoord<160 and Ycoord<120: #image 1 top left
                     resize = cv2.imread('ocean.jpg',1)
                     resize = cv2.resize(resize, (320,240))
                     resize_pygame = pygame.image.load('ocean.jpg')
@@ -483,7 +486,7 @@ while code_run:
                     resize_rect = resize_pygame.get_rect()
                     hsv_img = cv2.cvtColor(resize, cv2.COLOR_BGR2HSV)
                     imageProcessing(hsv_img,resize)
-                elif Xcoord>160 and Ycoord <120: #Image 3
+                elif Xcoord>160 and Ycoord <120: #Image 3 top right
                     resize = cv2.imread('puzzle.png',1)
                     resize = cv2.resize(resize, (320,240))
                     resize_pygame = pygame.image.load('puzzle.png')
@@ -491,7 +494,7 @@ while code_run:
                     resize_rect = resize_pygame.get_rect()
                     hsv_img = cv2.cvtColor(resize, cv2.COLOR_BGR2HSV)
                     imageProcessing(hsv_img,resize)
-                elif Xcoord <160 and Ycoord >120: #Image 2
+                elif Xcoord <160 and Ycoord >120: #Image 2 bottom left
                     resize = cv2.imread('Cornell.jpg',1)
                     resize = cv2.resize(resize, (320,240))
                     resize_pygame = pygame.image.load('Cornell.jpg')
@@ -499,7 +502,7 @@ while code_run:
                     resize_rect = resize_pygame.get_rect()
                     hsv_img = cv2.cvtColor(resize, cv2.COLOR_BGR2HSV)
                     imageProcessing(hsv_img,resize)
-                else: #Image 4
+                else:                           #Image 4 bottom right
                     resize = cv2.imread('flowers.png',1)
                     resize = cv2.resize(resize, (320,240))
                     resize_pygame = pygame.image.load('flowers.png')
@@ -512,7 +515,7 @@ while code_run:
                 screen.blit(canvasPygame,canvas_rect)
                 pygame.display.flip()
 
-            elif canvas_screen ==True:
+            elif canvas_screen ==True:  #tap on image -> find shape and display color choices
                 found_shape=False
                 color_range=0
                 while color_range <13:
@@ -718,14 +721,14 @@ while code_run:
                         break
                     else:
                         color_range=color_range+1
-                if found_shape==True and free_play ==True:
+                if found_shape==True and free_play ==True:  #if free play, display hue gradient
                     #display hue screen
                     screen.fill(BLACK)
                     screen.blit(all_colors_pygame ,all_colors_rect)
                     hue_screen=True
                 canvas_screen = not canvas_screen
                 pygame.display.flip()
-            elif hue_screen==True:
+            elif hue_screen==True:  #hue gradient touch, get color and display color gradient
                 #match x,y to hue
                 hue = all_colors[Ycoord,Xcoord]
                 hue_int =np.uint8([[[int(hue[0]),int(hue[1]),int(hue[2])]]])
@@ -773,7 +776,7 @@ while code_run:
                 hue_screen=False
                 
                 pygame.display.flip()
-            else:
+            else:    #color gradient touch
                 #find color of pick (x,y)
                 # find fillColor
                 if free_play ==True:
@@ -833,6 +836,7 @@ while code_run:
                 fillB = int(fillColor[0])
                 fillG = int(fillColor[1])
                 fillR = int(fillColor[2])
+                #color in shape
                 if color_range ==0:             #RED
                     cv2.drawContours(canvas, [contours_Red[shape_num]], -1, (fillB,fillG,fillR),thickness=-1)
                 elif color_range ==1:           #ORANGE
@@ -863,7 +867,7 @@ while code_run:
                     draw_screen = True
                     cv2.drawContours(canvas, contours_all[12], -1, (0,0,0), thickness = 1)
                     cv2.drawContours(canvas, contours_all[13], -1, (0,0,0), thickness = -1)
-
+                    #display image
                     cv2.imwrite('canvas.png',canvas)
                     canvasPygame = pygame.image.load("canvas.png")
                     canvas_rect = canvasPygame.get_rect()
